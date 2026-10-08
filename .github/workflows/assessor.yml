@@ -69,8 +69,10 @@ jobs:
         if: steps.auth.outputs.ok == 'true'
         env:
           BODY: ${{ github.event_name == 'issues' && github.event.issue.body || github.event.comment.body }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
           printf '%s' "$BODY" > event_body.txt      # never interpolated into a shell command
+          printf '%s' "$ISSUE_BODY" > issue_body.txt
           scripts/run_store.sh checkout store
           docker pull --quiet "$IMAGE"
           echo "DIGEST=$(docker inspect --format '{{index .RepoDigests 0}}' "$IMAGE")" >> "$GITHUB_ENV"
@@ -89,7 +91,8 @@ jobs:
         run: |
           $DOCKER_RUN -e ANTHROPIC_API_KEY -e PKPOC_IMAGE="$DIGEST" "$IMAGE" \
             python -m orchestrator.github_bot handle --issue "$ISSUE" --event "$EVENT" --author "$AUTHOR" \
-            --title "$TITLE" --body-file event_body.txt --out comment.md --action-file action.txt
+            --title "$TITLE" --body-file event_body.txt --issue-body-file issue_body.txt \
+            --out comment.md --action-file action.txt
           echo "action=$(cat action.txt)" >> "$GITHUB_OUTPUT"
 
       - name: Run the analysis (network disabled)
@@ -113,7 +116,8 @@ jobs:
 
       - name: Commit the run store
         if: always() && steps.auth.outputs.ok == 'true' && steps.handle.outcome != 'skipped'
-        run: scripts/run_store.sh commit store "issue #$ISSUE: $EVENT by $AUTHOR ($(cat action.txt 2>/dev/null || echo error))"
+        run: |
+          scripts/run_store.sh commit store "issue #$ISSUE: $EVENT by $AUTHOR ($(cat action.txt 2>/dev/null || echo error))"
 
       - name: Build the portal
         id: site

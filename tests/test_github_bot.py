@@ -64,3 +64,10 @@ def test_portal_lists_requests_and_never_publishes_pseudonym_map(fake_engine, tm
     assert "#3" in html and "awaiting answer" in html and "issues/new?template=analysis-request.yml" in html
     assert (tmp_path / "site" / "runs" / "index.html").exists()
     assert not list((tmp_path / "site").rglob("pseudonym_map.jsonl"))
+
+
+def test_comment_on_issue_without_state_recovers_from_issue_body(fake_engine):  # noqa: F811
+    comment, action = bot.handle(9, "comment", "M1, as declared in the report", "alice", "t", issue_body=FORM_BODY)
+    assert "re-read from the issue description" in comment and "Proposed analysis spec" in comment
+    comment, action = bot.handle(9, "comment", "/confirm", "alice")
+    assert action == "execute"

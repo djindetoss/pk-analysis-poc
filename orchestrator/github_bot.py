@@ -159,10 +159,20 @@ def render_run(run_id: str) -> str:
 
 
 # --------------------------------------------------------------------------- handlers
-def handle(issue: int, event: str, body: str, author: str, title: str = "") -> tuple[str, str]:
+def handle(issue: int, event: str, body: str, author: str, title: str = "",
+           issue_body: str = "") -> tuple[str, str]:
     """Returns (comment_markdown, action) with action in {none, execute, replay}."""
     state = load_state(issue, title)
     extractor = get_extractor()
+    prefix = ""
+    if event == "comment" and state["status"] == "new" and parse_issue_body(issue_body):
+        # No stored state for this issue (e.g. a step failed before saving): restart from the issue body.
+        recovered, _ = handle(issue, "opened", issue_body, author, title)
+        state = load_state(issue, title)
+        cmd, _ = parse_command(body)
+        if cmd is not None or state["status"] != "needs_clarification":
+            return recovered + "\n\n_(The request was re-read from the issue description.)_", "none"
+        prefix = "_(The request was re-read from the issue description.)_\n\n"
 
     def proposal_reply(p: pipeline.Proposal, ev: str) -> tuple[str, str]:
         state["proposal"] = p.to_dict()
@@ -214,7 +224,8 @@ def handle(issue: int, event: str, body: str, author: str, title: str = "") -> t
                 and json.dumps(revised.spec, sort_keys=True) == before:
             return ("No change to the spec was understood from this comment. Reply `/confirm` to run the "
                     "proposed spec, or describe the correction more explicitly."), "none"
-        return proposal_reply(revised, "reply")
+        comment, action = proposal_reply(revised, "reply")
+        return prefix + comment, action
     return "", "none"  # ordinary discussion: the bot stays silent
 
 
@@ -252,6 +263,7 @@ def main() -> None:
     ap.add_argument("--issue", type=int, required=True)
     ap.add_argument("--event", choices=["opened", "comment"], default="comment")
     ap.add_argument("--body-file", type=Path)
+    ap.add_argument("--issue-body-file", type=Path, help="issue description (to recover a request without state)")
     ap.add_argument("--author", default="unknown")
     ap.add_argument("--title", default="")
     ap.add_argument("--out", type=Path, required=True, help="markdown comment (appended)")
@@ -261,7 +273,8 @@ def main() -> None:
     action = "none"
     if a.command == "handle":
         body = a.body_file.read_text() if a.body_file else ""
-        comment, action = handle(a.issue, a.event, body, a.author, a.title)
+        issue_body = a.issue_body_file.read_text() if a.issue_body_file else ""
+        comment, action = handle(a.issue, a.event, body, a.author, a.title, issue_body)
     elif a.command == "execute":
         comment = execute(a.issue, a.author)
     else:

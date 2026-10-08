@@ -1,0 +1,23 @@
+{
+  "compartments": 2,
+  "absorption": "first_order",
+  "route": "oral",
+  "error_model": "combined",
+  "iiv": [
+    "CL",
+    "V2",
+    "KA"
+  ],
+  "estimation": "FOCEi",
+  "reference_values": {
+    "CL": 4.2,
+    "V2": 35.0,
+    "Q": 8.1,
+    "V3": 120.0,
+    "KA": 1.1,
+    "IIV_CL": 30.0
+  },
+  "analysis_type": "primary",
+  "blq_method": "M1",
+  "template": "pk_2cmt_oral_v1"
+}

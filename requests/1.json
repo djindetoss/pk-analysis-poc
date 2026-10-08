@@ -1,10 +1,10 @@
 {
   "issue": 1,
   "title": "Analysis request: Reproduce the applicant's model for XYZ-123 (end-to-end test)",
-  "status": "rejected",
+  "status": "awaiting_confirmation",
   "proposal": {
-    "status": "rejected",
-    "prompt_hash": "6c07f855cd545006787c098776d1bc05eb705c169b0ca8f6b45fb7d224973090",
+    "status": "ready",
+    "prompt_hash": "3c637a48a56bddf41c964b3397601b316a90351286a9cd335034d33db914d29f",
     "spec": {
       "compartments": 2,
       "absorption": "first_order",
@@ -26,21 +26,17 @@
       },
       "analysis_type": "sensitivity",
       "blq_method": "M3",
-      "template": "pk_2cmt_oral_v1",
-      "unsupported_features": [
-        "Time-varying covariate on CL"
-      ]
+      "template": "pk_2cmt_oral_v1"
     },
     "parent_id": "R-20261008-134356-4ad9",
     "missing": [],
     "questions": [],
-    "reasons": [
-      "out of scope \u2013 expert review",
-      "unsupported request: Time-varying covariate on CL"
+    "reasons": [],
+    "sensitivity": [
+      "blq_method"
     ],
-    "sensitivity": [],
     "job_ids": [
-      "J-d229f30124"
+      "J-71710b716b"
     ],
     "extractor": {
       "name": "anthropic",
@@ -105,8 +101,13 @@
       "ts": "2026-10-08T13:46:34Z",
       "event": "replayed",
       "by": "djindetoss"
+    },
+    {
+      "ts": "2026-10-08T14:11:53Z",
+      "event": "refine_requested",
+      "by": "djindetoss"
     }
   ],
   "created_at": "2026-10-08T13:39:07Z",
-  "updated_at": "2026-10-08T13:46:34Z"
+  "updated_at": "2026-10-08T14:11:53Z"
 }

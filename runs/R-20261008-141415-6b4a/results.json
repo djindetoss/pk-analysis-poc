@@ -1,0 +1,364 @@
+{
+  "run_id": "R-20261008-141415-6b4a",
+  "parent_run_id": "R-20261008-141300-3341",
+  "analysis_type": "sensitivity",
+  "purpose": "replay",
+  "spec": {
+    "compartments": 2,
+    "absorption": "first_order",
+    "route": "oral",
+    "error_model": "combined",
+    "iiv": [
+      "CL",
+      "V2",
+      "KA"
+    ],
+    "estimation": "FOCEi",
+    "reference_values": {
+      "CL": 4.2,
+      "V2": 35.0,
+      "Q": 8.1,
+      "V3": 120.0,
+      "KA": 1.1,
+      "IIV_CL": 30.0
+    },
+    "analysis_type": "sensitivity",
+    "blq_method": "M3",
+    "template": "pk_2cmt_oral_v1"
+  },
+  "comparable": true,
+  "checks": [
+    {
+      "check": "convergence",
+      "status": "pass",
+      "detail": "Optimizer message: Normal exit from bobyqa"
+    },
+    {
+      "check": "covariance step",
+      "status": "pass",
+      "detail": "Covariance matrix obtained (method |r|,|s| (full))"
+    },
+    {
+      "check": "RSE feasibility",
+      "status": "pass",
+      "detail": "All RSE below 50%"
+    },
+    {
+      "check": "parameter bounds",
+      "status": "pass",
+      "detail": "All estimates and variances within plausible bounds"
+    },
+    {
+      "check": "estimation diagnostics",
+      "status": "warn",
+      "detail": "nlmixr2 reported: gradient problems with covariance; see $scaleInfo; since sandwich matrix is corrected, you may compare to $covR or $covS if you wish; S matrix non-positive definite but corrected by S = sqrtm(S%*%S); R matrix non-positive definite but corrected by R = sqrtm(R%*%R); last objective function was not at minimum, possible problems in optimization; ETAs were reset to zero during optimization; (Can control by foceiControl(resetEtaP=.))"
+    }
+  ],
+  "comparison": [
+    {
+      "parameter": "CL/F (L/h)",
+      "key": "CL",
+      "applicant": 4.2,
+      "independent": 4.14305612072587,
+      "ci_lower": 3.85089188823741,
+      "ci_upper": 4.45738663085154,
+      "rel_diff": -0.013558066493840561,
+      "flag": "",
+      "applicant_in_ci": true
+    },
+    {
+      "parameter": "V2/F (L)",
+      "key": "V2",
+      "applicant": 35.0,
+      "independent": 35.2035742616756,
+      "ci_lower": 31.0989795146072,
+      "ci_upper": 39.8499134100272,
+      "rel_diff": 0.005816407476445663,
+      "flag": "",
+      "applicant_in_ci": true
+    },
+    {
+      "parameter": "Q/F (L/h)",
+      "key": "Q",
+      "applicant": 8.1,
+      "independent": 7.97340636138433,
+      "ci_lower": 7.54889349729962,
+      "ci_upper": 8.42179175352072,
+      "rel_diff": -0.015628844273539434,
+      "flag": "",
+      "applicant_in_ci": true
+    },
+    {
+      "parameter": "V3/F (L)",
+      "key": "V3",
+      "applicant": 120.0,
+      "independent": 114.695252711615,
+      "ci_lower": 108.260389269127,
+      "ci_upper": 121.512596466643,
+      "rel_diff": -0.04420622740320835,
+      "flag": "",
+      "applicant_in_ci": true
+    },
+    {
+      "parameter": "KA (1/h)",
+      "key": "KA",
+      "applicant": 1.1,
+      "independent": 1.13387866377543,
+      "ci_lower": 0.947616369889547,
+      "ci_upper": 1.35675244225151,
+      "rel_diff": 0.03079878525039073,
+      "flag": "",
+      "applicant_in_ci": true
+    },
+    {
+      "parameter": "IIV CL (CV%)",
+      "key": "IIV_CL",
+      "applicant": 30.0,
+      "independent": 27.3715297727821,
+      "ci_lower": null,
+      "ci_upper": null,
+      "rel_diff": -0.08761567424059666,
+      "flag": "",
+      "applicant_in_ci": null
+    }
+  ],
+  "sources_of_difference": {
+    "flagged_parameters": [],
+    "facts": [
+      "BLQ method used in this run: M3; 7 censored observations used; BLQ fraction 1.7% overall, 6.2% of samples with NTIME ≥ 24 h.",
+      "Actual sampling times used; 9 records deviate from nominal time beyond the QC tolerance.",
+      "3 records excluded and 11 records corrected during data preparation (see QC log).",
+      "Estimation: FOCEi, template pk_2cmt_oral_v1.",
+      "Software: R 4.6.1, nlmixr2 7.0.1, nlmixr2est 7.1.0, rxode2 5.1.7.1."
+    ],
+    "generic_factors": [
+      {
+        "factor": "Handling of BLQ observations",
+        "description": "M1 (discarding) and M3 (likelihood-based censoring) use different information from late samples, which mostly informs terminal-phase parameters (V3/F, Q/F) and CL/F."
+      },
+      {
+        "factor": "Time variables and rounding",
+        "description": "Use of actual vs nominal times, and rounding of sampling times, changes the observation design seen by the model."
+      },
+      {
+        "factor": "Data exclusions and corrections",
+        "description": "Records excluded or corrected during data preparation (pre-dose records, unit conversions, outliers) may differ from the applicant's data handling."
+      },
+      {
+        "factor": "Estimation settings",
+        "description": "Estimation algorithm, interaction term, initial estimates, parameterisation and optimiser tolerances can lead to different local optima."
+      },
+      {
+        "factor": "Software and versions",
+        "description": "Different software (e.g. NONMEM vs nlmixr2) or versions may give numerically different estimates for the same model."
+      }
+    ]
+  },
+  "qc": {
+    "summary": {
+      "raw_records": 483,
+      "prepared_records": 480,
+      "subjects": 60,
+      "observations_used": 420,
+      "censored_observations": 7,
+      "excluded_records": 3,
+      "fixed_records": 11,
+      "warnings": 1,
+      "blq_fraction": 0.0167,
+      "blq_fraction_late": 0.0625,
+      "ntime_deviations": 9,
+      "blq_method": "M3"
+    },
+    "log": [
+      {
+        "check": "required_columns",
+        "status": "pass",
+        "n_records": 0,
+        "detail": "All 11 required columns present",
+        "subjects": []
+      },
+      {
+        "check": "units",
+        "status": "fix",
+        "n_records": 4,
+        "detail": "Converted DV and LLOQ from ug/mL to ng/mL",
+        "subjects": [
+          "SYN-052"
+        ]
+      },
+      {
+        "check": "duplicates",
+        "status": "pass",
+        "n_records": 0,
+        "detail": "No duplicate records",
+        "subjects": []
+      },
+      {
+        "check": "chronology",
+        "status": "pass",
+        "n_records": 0,
+        "detail": "Every subject has a dose record (60 subjects)",
+        "subjects": []
+      },
+      {
+        "check": "records_before_dose",
+        "status": "exclude",
+        "n_records": 3,
+        "detail": "Observation records before the first dose excluded (3 with a quantified concentration > 0, which is not expected before dosing)",
+        "subjects": [
+          "SYN-007",
+          "SYN-023",
+          "SYN-041"
+        ]
+      },
+      {
+        "check": "ntime_vs_time",
+        "status": "warn",
+        "n_records": 9,
+        "detail": "Actual time deviates from nominal by more than max(0.5 h, 10% of NTIME); records kept, actual TIME used",
+        "subjects": [
+          "SYN-005",
+          "SYN-007",
+          "SYN-012",
+          "SYN-014",
+          "SYN-019",
+          "SYN-025",
+          "SYN-035",
+          "SYN-046"
+        ]
+      },
+      {
+        "check": "missing_covariates",
+        "status": "pass",
+        "n_records": 0,
+        "detail": "WT available for all subjects",
+        "subjects": []
+      },
+      {
+        "check": "blq_proportion",
+        "status": "pass",
+        "n_records": 7,
+        "detail": "7 BLQ records = 1.7% of observations (6.2% of samples with NTIME >= 24 h)",
+        "subjects": []
+      },
+      {
+        "check": "blq_handling",
+        "status": "fix",
+        "n_records": 7,
+        "detail": "BLQ method M3: BLQ records kept as left-censored (DV set to LLOQ, CENS = 1)",
+        "subjects": []
+      }
+    ]
+  },
+  "engine": {
+    "estimation_method": "FOCEi",
+    "blq_method": "M3",
+    "ofv": 4397.29816414251,
+    "aic": 5189.20653203444,
+    "n_subjects": 60,
+    "n_observations": 420,
+    "n_censored": 7,
+    "optimizer_message": "Normal exit from bobyqa",
+    "optimizer_message_ok": true,
+    "covariance_method": "|r|,|s| (full)",
+    "covariance_ok": true,
+    "estimates": [
+      {
+        "parameter": "CL",
+        "estimate": 4.14305612072587,
+        "log_estimate": 1.42143370891853,
+        "se_log": 0.0373113632403897,
+        "rse_percent": 3.73113632403897,
+        "ci_lower": 3.85089188823741,
+        "ci_upper": 4.45738663085154,
+        "fixed": false,
+        "iiv_cv_percent": 27.3715297727821,
+        "shrinkage_percent": 4.77026533657258
+      },
+      {
+        "parameter": "V2",
+        "estimate": 35.2035742616756,
+        "log_estimate": 3.56114761897393,
+        "se_log": 0.0632524956275338,
+        "rse_percent": 6.32524956275338,
+        "ci_lower": 31.0989795146072,
+        "ci_upper": 39.8499134100272,
+        "fixed": false,
+        "iiv_cv_percent": 25.6364736619131,
+        "shrinkage_percent": 20.175328919651
+      },
+      {
+        "parameter": "Q",
+        "estimate": 7.97340636138433,
+        "log_estimate": 2.07611179940887,
+        "se_log": 0.0279141882039795,
+        "rse_percent": 2.79141882039795,
+        "ci_lower": 7.54889349729962,
+        "ci_upper": 8.42179175352072,
+        "fixed": false,
+        "iiv_cv_percent": null,
+        "shrinkage_percent": null
+      },
+      {
+        "parameter": "V3",
+        "estimate": 114.695252711615,
+        "log_estimate": 4.74227863453959,
+        "se_log": 0.0294593665726444,
+        "rse_percent": 2.94593665726444,
+        "ci_lower": 108.260389269127,
+        "ci_upper": 121.512596466643,
+        "fixed": false,
+        "iiv_cv_percent": null,
+        "shrinkage_percent": null
+      },
+      {
+        "parameter": "KA",
+        "estimate": 1.13387866377543,
+        "log_estimate": 0.125644201146454,
+        "se_log": 0.0915576685610541,
+        "rse_percent": 9.15576685610541,
+        "ci_lower": 0.947616369889547,
+        "ci_upper": 1.35675244225151,
+        "fixed": false,
+        "iiv_cv_percent": 29.1350241371107,
+        "shrinkage_percent": 35.1073948492634
+      }
+    ],
+    "residual_error": {
+      "add.sd": {
+        "estimate": 8.08958800386171,
+        "se": 2.75323047851458,
+        "rse_percent": 34.0342484339162
+      },
+      "prop.sd": {
+        "estimate": 0.14371227097328,
+        "se": 0.00537133911419209,
+        "rse_percent": 3.73756470328881
+      }
+    },
+    "warnings": [],
+    "run_info": [
+      "gradient problems with covariance; see $scaleInfo",
+      "since sandwich matrix is corrected, you may compare to $covR or $covS if you wish",
+      "S matrix non-positive definite but corrected by S = sqrtm(S%*%S)",
+      "R matrix non-positive definite but corrected by R = sqrtm(R%*%R)",
+      "last objective function was not at minimum, possible problems in optimization",
+      "ETAs were reset to zero during optimization; (Can control by foceiControl(resetEtaP=.))"
+    ],
+    "resumed_from_checkpoint": false,
+    "elapsed_seconds": 11.9185395240784,
+    "seed": 20240607,
+    "versions": {
+      "nlmixr2": "7.0.1",
+      "nlmixr2est": "7.1.0",
+      "rxode2": "5.1.7.1",
+      "lotri": "1.0.5",
+      "ggplot2": "4.0.3",
+      "jsonlite": "2.0.0",
+      "R": "4.6.1",
+      "BLAS": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3",
+      "LAPACK": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so"
+    },
+    "platform": "x86_64-pc-linux-gnu"
+  }
+}

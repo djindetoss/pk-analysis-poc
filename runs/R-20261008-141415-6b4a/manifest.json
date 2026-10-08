@@ -1,0 +1,123 @@
+{
+  "run_id": "R-20261008-141415-6b4a",
+  "parent_run_id": "R-20261008-141300-3341",
+  "root_run_id": "R-20261008-134033-5040",
+  "purpose": "replay",
+  "analysis_type": "sensitivity",
+  "sensitivity_fields": [],
+  "status": "completed",
+  "created_at": "2026-10-08T14:14:15Z",
+  "completed_at": "2026-10-08T14:14:30Z",
+  "spec": {
+    "compartments": 2,
+    "absorption": "first_order",
+    "route": "oral",
+    "error_model": "combined",
+    "iiv": [
+      "CL",
+      "V2",
+      "KA"
+    ],
+    "estimation": "FOCEi",
+    "reference_values": {
+      "CL": 4.2,
+      "V2": 35.0,
+      "Q": 8.1,
+      "V3": 120.0,
+      "KA": 1.1,
+      "IIV_CL": 30.0
+    },
+    "analysis_type": "sensitivity",
+    "blq_method": "M3",
+    "template": "pk_2cmt_oral_v1"
+  },
+  "spec_hash": "0030756b6dc1154888296838e116220220efa71e79063db429abd47172f527db",
+  "methodology_hash": "15de490dc0bac871c1176633475cba04a3be6b1269daf85223fe38a62eed9bde",
+  "template": {
+    "id": "pk_2cmt_oral_v1",
+    "version": "1.0.3",
+    "hash": "589f254e36326ab2ae18dce251949169b318f7e59c79210d33428f972dc38600",
+    "catalogue_version": "1.0.3"
+  },
+  "script_hash": "fdffd00a137b56c3daa89e23c5ac8b89b3918ed8e8ca2f41756e74f8b8f8b03b",
+  "seed": 20240607,
+  "input_data": {
+    "raw_file": "data/raw/adpc_synthetic.csv",
+    "raw_hash": "1cb7adff311dcd25660f2353d892964c98ad1932a6b69b6ed28c6ebfcaa48c6b",
+    "prepared_hash": "38d30404d452db3275fe44a8f1a96a4e78d3d35377ba67e53bfba0a645a67ff2"
+  },
+  "extractor": {
+    "name": null,
+    "model": null,
+    "prompt_version": null,
+    "job_ids": []
+  },
+  "confirmation": {
+    "at": "2026-10-08T14:14:15Z",
+    "by": "system",
+    "mode": "replay of a confirmed spec"
+  },
+  "packages": {
+    "python": {
+      "python": "3.12.3",
+      "jinja2": "3.1.4",
+      "pandas": "2.2.3",
+      "numpy": "2.1.3",
+      "jsonschema": "4.23.0",
+      "typer": "0.12.5"
+    },
+    "r": {
+      "nlmixr2": "7.0.1",
+      "nlmixr2est": "7.1.0",
+      "rxode2": "5.1.7.1",
+      "lotri": "1.0.5",
+      "ggplot2": "4.0.3",
+      "jsonlite": "2.0.0",
+      "R": "4.6.1",
+      "BLAS": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3",
+      "LAPACK": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so"
+    }
+  },
+  "environment": {
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "cpu": "AMD EPYC 7763 64-Core Processor",
+    "math_env": {
+      "OPENBLAS_CORETYPE": "Prescott",
+      "OPENBLAS_NUM_THREADS": "1",
+      "GLIBC_TUNABLES": "glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4"
+    },
+    "container_image": "ghcr.io/djindetoss/pk-analysis-poc@sha256:dd39ca7673a48f1e3f7b6df134be2b4f4ae00ef4e0a726894a72cbdbdf295b4b",
+    "git_commit": null,
+    "python_executable": "/opt/venv/bin/python"
+  },
+  "tool_version": "0.1.0",
+  "settings": {
+    "tolerance": 0.2,
+    "rse_threshold": 50.0,
+    "qc": {
+      "ntime_abs_tol_h": 0.5,
+      "ntime_rel_tol": 0.1,
+      "blq_warn_fraction": 0.1
+    }
+  },
+  "engine": {
+    "returncode": 0,
+    "elapsed_s": 14.9,
+    "resumed_from_checkpoint": false
+  },
+  "outputs": {
+    "script.R": "fdffd00a137b56c3daa89e23c5ac8b89b3918ed8e8ca2f41756e74f8b8f8b03b",
+    "spec.json": "4bfee2d8a9c847e2de617c6685b551139390aa3ed0b98cfeee9df7646455e38f",
+    "prepared_data.csv": "38d30404d452db3275fe44a8f1a96a4e78d3d35377ba67e53bfba0a645a67ff2",
+    "qc_log.json": "0e27caa5c03d9c6cf337ac6c806f776a517bbea3f329cb82ddfa56dc5e2ac00d",
+    "engine_results.json": "2f73ae14bc9f39e42350c46b1542edc3c8f5f3320d276b3b9b02fc3114745d7a",
+    "results.json": "66743ef45db6a91b321b22ef50158b498cc4e39dc992a85a1b3f8bbc9c6f7da8",
+    "comparison.csv": "8b7f3325a85a4e097a18717ef2a172bea6888af664be34cf09d0e9ce3dc060b5",
+    "individual_parameters.csv": "074dedefc5f0279eaa8fccbe227e6bd5f3b72a4c82a86a1646003336ce1b2009",
+    "fit.rds": "b845622d1a2832fff28bc237f7ad1b3984d53c20e50f85c124a99c8dee764aca",
+    "report.html": "aeaf3d13680c32708171b9681b00a25c5e54211b18190c71ce445f91c18fe7a2",
+    "engine.log": "9ae9778c560cefd3695efa6a55b210be8dc0a65105e2896ba1402218e0c5cc1f"
+  },
+  "comparable": true
+}

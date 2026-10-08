@@ -14,6 +14,23 @@ ROOT = Path(__file__).resolve().parents[1]
 TOOL_VERSION = (ROOT / "VERSION").read_text().strip()
 
 
+def load_dotenv(path: Path = ROOT / ".env") -> None:
+    """Read KEY=value lines from a local, git-ignored .env; real environment variables win."""
+    if not path.exists():
+        return
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        value = value.strip().strip('"').strip("'")
+        if value and key.strip() not in os.environ:
+            os.environ[key.strip()] = value
+
+
+load_dotenv()
+
+
 def runs_dir() -> Path:
     """Run store. Overridable for tests and CI (PKPOC_RUNS_DIR)."""
     d = Path(os.environ.get("PKPOC_RUNS_DIR", ROOT / "runs"))

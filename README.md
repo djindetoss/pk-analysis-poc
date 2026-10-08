@@ -138,7 +138,8 @@ Other commands: `refine <run_id> "<text>"`, `rerender <run_id>`, `replay <run_id
 
 - `extract_spec(prompt_text, current_spec=None) -> dict` ([`harness/extractors.py`](harness/extractors.py)).
 - **`MockExtractor`** (default): deterministic rule-based parser of the demo prompts; no network, no key.
-- **`AnthropicExtractor`**: used when `ANTHROPIC_API_KEY` is set (from a local `.env` that is never committed, or the GitHub Actions secret). Versioned system prompt [`harness/prompts/system_v1.md`](harness/prompts/system_v1.md), output constrained to the envelope schema with structured outputs, re-validated, at most 2 retries; after that the harness returns the list of fields for the assessor to supply instead of guessing.
+- **`AnthropicExtractor`**: used when `ANTHROPIC_API_KEY` is set (from a local `.env` that is never committed, or the GitHub Actions secret). Model `claude-opus-5-5` (configurable in `config/settings.toml`), versioned system prompt [`harness/prompts/system_v2.md`](harness/prompts/system_v2.md) (v1 kept for traceability), output constrained to the envelope schema with structured outputs, re-validated, at most 2 retries; after that the harness returns the list of fields for the assessor to supply instead of guessing. If the model declines a request, the API's server-side fallback answers and the model that actually answered is logged (`served_by`).
+- Structured outputs accept at most 16 nullable parameters per schema, so reference values and fixed parameters are exchanged as lists of `{param, value}` pairs and converted back to maps by the harness.
 - Every call is logged in `runs/audit/llm_calls.jsonl` (job ID, prompt hash, pseudonymised prompt, response, model, prompt version, attempts). The token → identifier mapping is written only to `runs/audit/pseudonym_map.jsonl`, which is excluded from the published site.
 - **Evaluation bench:** [`harness/eval/cases.jsonl`](harness/eval/cases.jsonl) (11 prompts with expected fields, including "must stay null" and out-of-scope cases).
 
@@ -146,7 +147,7 @@ Other commands: `refine <run_id> "<text>"`, `rerender <run_id>`, `replay <run_id
 .venv/bin/python -m harness.eval.run_eval --extractor mock
 ```
 
-  The mock scores 100% by construction (its rules were written for these prompts); the bench is meant for the real LLM (`--extractor anthropic`, run automatically in CI when the secret exists).
+  The mock scores 100% by construction (its rules were written for these prompts). The bench is meant for the real LLM (`--extractor anthropic`, run automatically in CI when the secret exists). **Claude Opus 5.5 with prompt v2: 49/49 fields, 11/11 cases** (2026-10-08), including leaving unstated fields null and reporting TMDD, three compartments and time-varying covariates as unsupported rather than mapping them onto the catalogue. Eleven cases is a smoke test, not a validation: a real bench needs ambiguous, multilingual and adversarial prompts written by assessors.
 
 **Deviation from the brief — temperature 0.** Current Claude models reject sampling parameters
 (`temperature`) with a 400 error, so the extractor cannot set it. Stability comes instead from a

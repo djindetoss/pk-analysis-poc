@@ -40,9 +40,19 @@ def _nullable(schema: dict) -> dict:
 
 
 def envelope_schema() -> dict[str, Any]:
-    """JSON schema of the envelope, used for structured outputs and for re-validation."""
-    num = {"type": "number"}
+    """JSON schema of the envelope, used for structured outputs and for re-validation.
+
+    Structured outputs allow at most 16 union-typed (nullable) parameters, so the
+    parameter/value maps are expressed as lists of {"param", "value"} pairs
+    (an empty list means "not stated") instead of objects with one nullable key each.
+    """
     ref_keys = PARAMS + [f"IIV_{p}" for p in PARAMS]
+
+    def pairs(keys: list[str]) -> dict:
+        return {"type": "array", "items": {
+            "type": "object", "additionalProperties": False, "required": ["param", "value"],
+            "properties": {"param": {"type": "string", "enum": keys}, "value": {"type": "number"}}}}
+
     return {
         "type": "object",
         "additionalProperties": False,
@@ -60,12 +70,8 @@ def envelope_schema() -> dict[str, Any]:
                     "iiv": _nullable({"type": "array", "items": {"type": "string", "enum": PARAMS}}),
                     "estimation": _nullable({"type": "string", "enum": ["FOCEi", "SAEM"]}),
                     "blq_method": _nullable({"type": "string", "enum": ["M1", "M3"]}),
-                    "fixed_params": _nullable({
-                        "type": "object", "additionalProperties": False, "required": PARAMS,
-                        "properties": {p: _nullable(num) for p in PARAMS}}),
-                    "reference_values": _nullable({
-                        "type": "object", "additionalProperties": False, "required": ref_keys,
-                        "properties": {k: _nullable(num) for k in ref_keys}}),
+                    "fixed_params": pairs(PARAMS),
+                    "reference_values": pairs(ref_keys),
                     "analysis_type": _nullable({"type": "string", "enum": ["primary", "sensitivity"]}),
                 },
             },
@@ -75,8 +81,14 @@ def envelope_schema() -> dict[str, Any]:
     }
 
 
+def pairs_to_dict(pairs: list[dict[str, Any]] | None) -> dict[str, float] | None:
+    return {p["param"]: float(p["value"]) for p in pairs} if pairs else None
+
+
 def empty_envelope() -> dict[str, Any]:
-    return {"spec": {k: None for k in SPEC_FIELDS}, "unsupported_requests": [], "notes": ""}
+    spec = {k: None for k in SPEC_FIELDS}
+    spec["fixed_params"], spec["reference_values"] = [], []
+    return {"spec": spec, "unsupported_requests": [], "notes": ""}
 
 
 class Extractor(ABC):
@@ -172,13 +184,13 @@ class MockExtractor(Extractor):
         for m in re.finditer(rf"(?:IIV|BSV)\s+on\s+(CL|V2|V3|V|Q|KA)\s*(?:of|=|:)?\s*{_NUM}\s*%", t, re.I):
             ref[f"IIV_{m.group(1).upper()}"] = float(m.group(2))
         if ref:
-            s["reference_values"] = {k: ref.get(k) for k in PARAMS + [f"IIV_{p}" for p in PARAMS]}
+            s["reference_values"] = [{"param": k, "value": v} for k, v in ref.items()]
 
         fixed: dict[str, float] = {}
         for m in re.finditer(rf"\bfix(?:ed)?\s+(CL|V2|V3|V|Q|KA)\s*(?:at|to|=)\s*{_NUM}", t, re.I):
             fixed[m.group(1).upper()] = float(m.group(2))
         if fixed:
-            s["fixed_params"] = {p: fixed.get(p) for p in PARAMS}
+            s["fixed_params"] = [{"param": k, "value": v} for k, v in fixed.items()]
 
         if current_spec is None and re.search(r"reproduc|applicant'?s model|as declared", t, re.I):
             s["analysis_type"] = "primary"
@@ -214,16 +226,21 @@ class AnthropicExtractor(Extractor):
             user = (f"<current_spec>\n{json.dumps(current_spec, sort_keys=True)}\n</current_spec>\n"
                     f"<assessor_request>\n{prompt_text}\n</assessor_request>\n\n"
                     "Mode: DIFF. Return only the fields the request changes; every other field null.")
-        response = self._client.messages.create(
+        response = self._client.beta.messages.create(
             model=self.model,
             max_tokens=4000,
             # Sampling parameters (temperature) are not accepted by current Claude models;
             # low effort + a schema-constrained output keep extraction stable.
             output_config={"effort": "low",
                            "format": {"type": "json_schema", "schema": envelope_schema()}},
+            # If the model declines, the API re-runs the request on a fallback model;
+            # the model that actually answered is recorded in the call log.
+            betas=["server-side-fallback-2026-07-01"],
+            fallbacks="default",
             system=self.system_prompt,
             messages=[{"role": "user", "content": user}],
         )
+        self.last_served_by = response.model
         if response.stop_reason == "refusal":
             raise ExtractionFailed(f"model declined the request ({response.stop_details})")
         if response.stop_reason == "max_tokens":

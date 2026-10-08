@@ -12,7 +12,9 @@ from typing import Any
 import jsonschema
 
 from common.core import append_jsonl, audit_dir, now_iso, settings, sha256_text
-from harness.extractors import Extractor, envelope_schema, get_extractor
+from harness.extractors import Extractor, envelope_schema, get_extractor, pairs_to_dict
+
+PAIR_FIELDS = ("fixed_params", "reference_values")
 from harness.pseudonymise import pseudonymise, store_mapping
 from validator.catalogue import load_schema
 
@@ -42,8 +44,8 @@ class HarnessResult:
 def _strip_nulls(d: dict[str, Any]) -> dict[str, Any]:
     out = {}
     for k, v in d.items():
-        if isinstance(v, dict):
-            v = {kk: vv for kk, vv in v.items() if vv is not None} or None
+        if k in PAIR_FIELDS:
+            v = pairs_to_dict(v)
         if v is not None:
             out[k] = v
     return out
@@ -85,6 +87,7 @@ def interpret(prompt_text: str, current_spec: dict | None = None,
         "job_id": job_id,
         "extractor": extractor.name,
         "model": extractor.model,
+        "served_by": getattr(extractor, "last_served_by", extractor.model),
         "prompt_version": extractor.prompt_version,
         "mode": "diff" if current_spec is not None else "new",
         "prompt_hash": sha256_text(ps.text),

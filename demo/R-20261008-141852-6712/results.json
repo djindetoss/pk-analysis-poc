@@ -1,8 +1,8 @@
 {
-  "run_id": "R-20261008-140825-06d2",
-  "parent_run_id": null,
+  "run_id": "R-20261008-141852-6712",
+  "parent_run_id": "R-20261008-141821-7241",
   "analysis_type": "primary",
-  "purpose": "analysis",
+  "purpose": "replay",
   "spec": {
     "compartments": 2,
     "absorption": "first_order",
@@ -78,17 +78,6 @@
       "applicant_in_ci": true
     },
     {
-      "parameter": "V3/F (L)",
-      "key": "V3",
-      "applicant": 120.0,
-      "independent": 117.435037949184,
-      "ci_lower": 110.36251875426,
-      "ci_upper": 124.960795510967,
-      "rel_diff": -0.02137468375680006,
-      "flag": "",
-      "applicant_in_ci": true
-    },
-    {
       "parameter": "Q/F (L/h)",
       "key": "Q",
       "applicant": 8.1,
@@ -96,6 +85,17 @@
       "ci_lower": 7.52912197608354,
       "ci_upper": 8.38225965918969,
       "rel_diff": -0.019228804188038216,
+      "flag": "",
+      "applicant_in_ci": true
+    },
+    {
+      "parameter": "V3/F (L)",
+      "key": "V3",
+      "applicant": 120.0,
+      "independent": 117.435037949184,
+      "ci_lower": 110.36251875426,
+      "ci_upper": 124.960795510967,
+      "rel_diff": -0.02137468375680006,
       "flag": "",
       "applicant_in_ci": true
     },
@@ -353,7 +353,7 @@
       "ETAs were reset to zero during optimization; (Can control by foceiControl(resetEtaP=.))"
     ],
     "resumed_from_checkpoint": false,
-    "elapsed_seconds": 11.8718655109406,
+    "elapsed_seconds": 11.7069294452667,
     "seed": 20240607,
     "versions": {
       "nlmixr2": "7.0.1",

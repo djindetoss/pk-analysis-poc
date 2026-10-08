@@ -1,15 +1,15 @@
 {
-  "run_id": "R-20261008-140840-6635",
-  "parent_run_id": "R-20261008-140825-06d2",
-  "root_run_id": "R-20261008-140825-06d2",
+  "run_id": "R-20261008-141836-2b90",
+  "parent_run_id": "R-20261008-141821-7241",
+  "root_run_id": "R-20261008-141821-7241",
   "purpose": "analysis",
   "analysis_type": "sensitivity",
   "sensitivity_fields": [
     "blq_method"
   ],
   "status": "completed",
-  "created_at": "2026-10-08T14:08:40Z",
-  "completed_at": "2026-10-08T14:08:55Z",
+  "created_at": "2026-10-08T14:18:36Z",
+  "completed_at": "2026-10-08T14:18:52Z",
   "spec": {
     "compartments": 2,
     "absorption": "first_order",
@@ -53,11 +53,11 @@
     "model": "rule-based",
     "prompt_version": "mock_v1",
     "job_ids": [
-      "J-a39da901fa"
+      "J-8c5a9b9abc"
     ]
   },
   "confirmation": {
-    "at": "2026-10-08T14:08:40Z",
+    "at": "2026-10-08T14:18:36Z",
     "by": "auto-confirm",
     "mode": "auto-confirm (demo)"
   },
@@ -85,14 +85,14 @@
   "environment": {
     "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
     "machine": "x86_64",
-    "cpu": "AMD EPYC 7763 64-Core Processor",
+    "cpu": "AMD EPYC 9V74 80-Core Processor",
     "math_env": {
       "OPENBLAS_CORETYPE": "Prescott",
       "OPENBLAS_NUM_THREADS": "1",
       "GLIBC_TUNABLES": "glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4"
     },
-    "container_image": "ghcr.io/djindetoss/pk-analysis-poc:sha-0a6e9da",
-    "git_commit": "0a6e9dae5c8c635dfa9d33217cc3cb66481a437d",
+    "container_image": "ghcr.io/djindetoss/pk-analysis-poc:sha-39060f2",
+    "git_commit": "39060f262255991b7d5beba50bd8273ae2702323",
     "python_executable": "/opt/venv/bin/python"
   },
   "tool_version": "0.1.0",
@@ -107,7 +107,7 @@
   },
   "engine": {
     "returncode": 0,
-    "elapsed_s": 15.0,
+    "elapsed_s": 15.4,
     "resumed_from_checkpoint": false
   },
   "outputs": {
@@ -115,13 +115,13 @@
     "spec.json": "1948614bd4e9466b39400a1043ef9aeb2445ef4df11e98d5022a97f0fcfbc512",
     "prepared_data.csv": "38d30404d452db3275fe44a8f1a96a4e78d3d35377ba67e53bfba0a645a67ff2",
     "qc_log.json": "0e27caa5c03d9c6cf337ac6c806f776a517bbea3f329cb82ddfa56dc5e2ac00d",
-    "engine_results.json": "834cd39b7c23c5610c3f7587d38fedcb95369e540867ec3b4d53ccaaf631f1f5",
-    "results.json": "c022cf9977b80748a7700dbbba3ef70ecf7bd47f1e2b901bf2c6a158ce5fd54e",
-    "comparison.csv": "1fe7805e871e9670b3f684a80720f7075947d9828a2a33af8c69187e0f13ced9",
+    "engine_results.json": "f535ea47b69e8a77738e93943930a5ca03d83f2be28ae6b14f68ace58922d405",
+    "results.json": "7b6fc11f739122ac8b2303e46dbbbb34a1f914c2da2ad45d5691b5d8d304814a",
+    "comparison.csv": "8b7f3325a85a4e097a18717ef2a172bea6888af664be34cf09d0e9ce3dc060b5",
     "individual_parameters.csv": "074dedefc5f0279eaa8fccbe227e6bd5f3b72a4c82a86a1646003336ce1b2009",
-    "fit.rds": "2eb9cd01ba54e66d35499e984625bdc04c55ff3e9ad02d9c0aa59d11f298e1cb",
-    "report.html": "7d3d5570130ebfd8042ddcefa55e7232a9750877c8dc7f62071cef8d49c918ed",
-    "engine.log": "9dd23768a0937e326aa72e13d344c7165260a71cad9a9872b9171d35aff27f20"
+    "fit.rds": "0332e9fb03c3f2762a68894a7f9d8428eacbaf10f0af2a2912930a3323c84416",
+    "report.html": "df345e897b2241b9fd9fecf30d6777f26560c93b087f323d640bf1cffe5174ad",
+    "engine.log": "542620239cbd5567f46ef08bb9956ef7d6b0859d6988b58673dfb3af7423f259"
   },
   "request_prompt_hash": "3c637a48a56bddf41c964b3397601b316a90351286a9cd335034d33db914d29f",
   "comparable": true

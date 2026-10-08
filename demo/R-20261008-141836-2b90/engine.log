@@ -1,4 +1,4 @@
-$ Rscript --vanilla script.R prepared_data.csv R-20261008-140855-e903
+$ Rscript --vanilla script.R prepared_data.csv R-20261008-141836-2b90
 ℹ parameter labels from comments are typically ignored in non-interactive mode
 ℹ Need to run with the source intact to parse comments
 ℹ moved zero initial estimate(s) off 0 (foceiControl(zeroTheta)): tka
@@ -26,4 +26,4 @@ calculating covariance matrix
 done
 → Calculating residuals/tables
 ✔ done
-Done in 11.7 s. OFV = 4372.933
+Done in 11.7 s. OFV = 4397.298

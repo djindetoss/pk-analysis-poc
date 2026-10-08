@@ -1,6 +1,6 @@
 {
-  "run1": "R-20261008-140825-06d2",
-  "run2": "R-20261008-140840-6635",
+  "run1": "R-20261008-141821-7241",
+  "run2": "R-20261008-141836-2b90",
   "out_of_scope": {
     "status": "rejected",
     "reasons": [
@@ -9,15 +9,15 @@
     ]
   },
   "rerender": {
-    "run_id": "R-20261008-140825-06d2",
+    "run_id": "R-20261008-141821-7241",
     "stored_script_hash": "41f519daf7a1adac8e51bef28150365230ef97a2c5e983f2d5d6962366ae729d",
     "rerendered_script_hash": "41f519daf7a1adac8e51bef28150365230ef97a2c5e983f2d5d6962366ae729d",
     "identical": true,
     "template_hash_unchanged": true
   },
   "replay": {
-    "original_run_id": "R-20261008-140825-06d2",
-    "replay_run_id": "R-20261008-140855-e903",
+    "original_run_id": "R-20261008-141821-7241",
+    "replay_run_id": "R-20261008-141852-6712",
     "script_hash_identical": true,
     "prepared_data_hash_identical": true,
     "ofv_original": 4372.93333404885,
@@ -30,8 +30,8 @@
       "CL.iiv_cv_percent": 0.0,
       "V2.estimate": 0.0
     },
-    "cpu_original": "AMD EPYC 7763 64-Core Processor",
-    "cpu_replay": "AMD EPYC 7763 64-Core Processor",
+    "cpu_original": "AMD EPYC 9V74 80-Core Processor",
+    "cpu_replay": "AMD EPYC 9V74 80-Core Processor",
     "same_cpu": true,
     "math_env_original": {
       "OPENBLAS_CORETYPE": "Prescott",
@@ -43,8 +43,8 @@
       "OPENBLAS_NUM_THREADS": "1",
       "GLIBC_TUNABLES": "glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4"
     },
-    "image_original": "ghcr.io/djindetoss/pk-analysis-poc:sha-0a6e9da",
-    "image_replay": "ghcr.io/djindetoss/pk-analysis-poc:sha-0a6e9da"
+    "image_original": "ghcr.io/djindetoss/pk-analysis-poc:sha-39060f2",
+    "image_replay": "ghcr.io/djindetoss/pk-analysis-poc:sha-39060f2"
   },
   "history_page": "/app/runs/index.html",
   "extractor": "mock",
@@ -74,17 +74,6 @@
         "applicant_in_ci": true
       },
       {
-        "parameter": "V3/F (L)",
-        "key": "V3",
-        "applicant": 120.0,
-        "independent": 117.435037949184,
-        "ci_lower": 110.36251875426,
-        "ci_upper": 124.960795510967,
-        "rel_diff": -0.02137468375680006,
-        "flag": "",
-        "applicant_in_ci": true
-      },
-      {
         "parameter": "Q/F (L/h)",
         "key": "Q",
         "applicant": 8.1,
@@ -92,6 +81,17 @@
         "ci_lower": 7.52912197608354,
         "ci_upper": 8.38225965918969,
         "rel_diff": -0.019228804188038216,
+        "flag": "",
+        "applicant_in_ci": true
+      },
+      {
+        "parameter": "V3/F (L)",
+        "key": "V3",
+        "applicant": 120.0,
+        "independent": 117.435037949184,
+        "ci_lower": 110.36251875426,
+        "ci_upper": 124.960795510967,
+        "rel_diff": -0.02137468375680006,
         "flag": "",
         "applicant_in_ci": true
       },
@@ -186,17 +186,6 @@
         "applicant_in_ci": true
       },
       {
-        "parameter": "V3/F (L)",
-        "key": "V3",
-        "applicant": 120.0,
-        "independent": 114.695252711615,
-        "ci_lower": 108.260389269127,
-        "ci_upper": 121.512596466643,
-        "rel_diff": -0.04420622740320835,
-        "flag": "",
-        "applicant_in_ci": true
-      },
-      {
         "parameter": "Q/F (L/h)",
         "key": "Q",
         "applicant": 8.1,
@@ -204,6 +193,17 @@
         "ci_lower": 7.54889349729962,
         "ci_upper": 8.42179175352072,
         "rel_diff": -0.015628844273539434,
+        "flag": "",
+        "applicant_in_ci": true
+      },
+      {
+        "parameter": "V3/F (L)",
+        "key": "V3",
+        "applicant": 120.0,
+        "independent": 114.695252711615,
+        "ci_lower": 108.260389269127,
+        "ci_upper": 121.512596466643,
+        "rel_diff": -0.04420622740320835,
         "flag": "",
         "applicant_in_ci": true
       },

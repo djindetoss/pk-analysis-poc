@@ -87,7 +87,7 @@
   "warnings": [],
   "run_info": ["gradient problems with covariance; see $scaleInfo", "since sandwich matrix is corrected, you may compare to $covR or $covS if you wish", "S matrix non-positive definite but corrected by S = sqrtm(S%*%S)", "R matrix non-positive definite but corrected by R = sqrtm(R%*%R)", "last objective function was not at minimum, possible problems in optimization", "ETAs were reset to zero during optimization; (Can control by foceiControl(resetEtaP=.))"],
   "resumed_from_checkpoint": false,
-  "elapsed_seconds": 11.8718655109406,
+  "elapsed_seconds": 11.7069294452667,
   "seed": 20240607,
   "versions": {
     "nlmixr2": "7.0.1",

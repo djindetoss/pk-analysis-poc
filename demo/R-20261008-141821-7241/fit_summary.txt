@@ -1,67 +1,67 @@
 ── nlmixr² FOCEi (outer: bobyqa) ──
 
           OBJF      AIC      BIC Log-likelihood Condition#(Cov) Condition#(Cor)
-FOCEi 4397.298 5189.207 5229.609      -2584.603        325625.5        18.22241
+FOCEi 4372.933 5151.977 5192.211      -2565.988        578048.5        14.81826
 
 ── Time (sec fit$time): ──
 
            setup optimize covariance preprocess postprocess table compress
-elapsed 3.310287 3.585024   4.324573      0.046       0.033 0.045    0.001
+elapsed 3.629609  3.27927   3.701391      0.055       0.032 0.046    0.002
             other
-elapsed 0.5871162
+elapsed 0.6247299
 
 ── Population Parameters (fit$parFixed or fit$parFixedDf): ──
 
                                   Parameter  Est.      SE  %RSE
-tcl                          log CL/F (L/h)  1.42  0.0373  2.62
-tvc                            log V2/F (L)  3.56  0.0633  1.78
-tq                            log Q/F (L/h)  2.08  0.0279  1.34
-tvp                            log V3/F (L)  4.74  0.0295 0.621
-tka                            log KA (1/h) 0.126  0.0916  72.9
-add.sd         Additive residual SD (ng/mL)  8.09    2.75  34.0
-prop.sd Proportional residual SD (fraction) 0.144 0.00537  3.74
+tcl                          log CL/F (L/h)  1.41  0.0362  2.57
+tvc                            log V2/F (L)  3.57  0.0608  1.70
+tq                            log Q/F (L/h)  2.07  0.0274  1.32
+tvp                            log V3/F (L)  4.77  0.0317 0.665
+tka                            log KA (1/h) 0.131  0.0884  67.4
+add.sd         Additive residual SD (ng/mL)  5.84    3.58  61.4
+prop.sd Proportional residual SD (fraction) 0.145 0.00525  3.61
         Back-transformed(95%CI) BSV(CV%) Shrink(SD)%
-tcl           4.14 (3.85, 4.46)     27.4       4.77 
-tvc           35.2 (31.1, 39.8)     25.6       20.2 
-tq            7.97 (7.55, 8.42)                     
-tvp              115 (108, 122)                     
-tka          1.13 (0.948, 1.36)     29.1       35.1 
-add.sd        8.09 (2.69, 13.5)                     
-prop.sd    0.144 (0.133, 0.154)                     
+tcl           4.09 (3.81, 4.39)     27.0       5.58 
+tvc           35.5 (31.5, 40.0)     24.9       19.5 
+tq            7.94 (7.53, 8.38)                     
+tvp              117 (110, 125)                     
+tka          1.14 (0.959, 1.36)     28.7       34.7 
+add.sd       5.84 (-1.19, 12.9)                     
+prop.sd    0.145 (0.135, 0.156)                     
  
   Covariance Type (fit$covMethod): |r|,|s| (full)
     other calculated covs (setCov()): r; s; r,s; r (full); s (full)
   Some strong fixed parameter correlations exist (fit$cor) :
                 cor:tvc,tcl              cor:tq,tcl             cor:tvp,tcl 
-                0.0702                   0.134                 -0.0521  
+                 0.117                   0.106                 0.00333  
             cor:tka,tcl          cor:add.sd,tcl         cor:prop.sd,tcl 
-               -0.0533                 -0.0446                  0.0977  
+               -0.0133                  -0.168                   0.129  
       cor:om.eta.cl,tcl       cor:om.eta.vc,tcl       cor:om.eta.ka,tcl 
-                -0.153                   0.263                 -0.0457  
+                -0.185                   0.279                 -0.0350  
              cor:tq,tvc             cor:tvp,tvc             cor:tka,tvc 
-                -0.612                   0.102                   0.751  
+                -0.593                  0.0524                   0.732  
          cor:add.sd,tvc         cor:prop.sd,tvc       cor:om.eta.cl,tvc 
-                -0.405                 -0.0464                  0.0395  
+                -0.323                  -0.104                  0.0529  
       cor:om.eta.vc,tvc       cor:om.eta.ka,tvc              cor:tvp,tq 
-                -0.201                   0.401                  0.0288  
+               -0.0977                   0.373                  0.0850  
              cor:tka,tq           cor:add.sd,tq          cor:prop.sd,tq 
-                -0.629                  0.0940                   0.111  
+                -0.605                 0.00148                   0.133  
        cor:om.eta.cl,tq        cor:om.eta.vc,tq        cor:om.eta.ka,tq 
-                 0.123                   0.280                  -0.246  
+                 0.122                   0.212                  -0.216  
             cor:tka,tvp          cor:add.sd,tvp         cor:prop.sd,tvp 
-               -0.0601                 -0.0506                  0.0259  
+                -0.111                 -0.0366                  0.0580  
       cor:om.eta.cl,tvp       cor:om.eta.vc,tvp       cor:om.eta.ka,tvp 
-                 0.102                  -0.306                   0.242  
+                 0.136                  -0.293                   0.205  
          cor:add.sd,tka         cor:prop.sd,tka       cor:om.eta.cl,tka 
-                -0.228                 -0.0136                 -0.0795  
+                -0.161                 -0.0448                 -0.0677  
       cor:om.eta.vc,tka       cor:om.eta.ka,tka      cor:prop.sd,add.sd 
-                -0.363                   0.183                  -0.301  
+                -0.247                   0.124                  -0.267  
    cor:om.eta.cl,add.sd    cor:om.eta.vc,add.sd    cor:om.eta.ka,add.sd 
-                 0.197                  0.0618                  -0.349  
+                 0.164                  0.0417                  -0.317  
   cor:om.eta.cl,prop.sd   cor:om.eta.vc,prop.sd   cor:om.eta.ka,prop.sd 
-                -0.271                 -0.0876                  0.0363  
+                -0.262                  -0.129                  0.0151  
 cor:om.eta.vc,om.eta.cl cor:om.eta.ka,om.eta.cl cor:om.eta.ka,om.eta.vc 
-                0.0660                 0.00610                  0.0164  
+                0.0501                  0.0137                  0.0339  
  
 
   No correlations in between subject variability (BSV) matrix
@@ -74,19 +74,18 @@ cor:om.eta.vc,om.eta.cl cor:om.eta.ka,om.eta.cl cor:om.eta.ka,om.eta.vc
    • R matrix non-positive definite but corrected by R = sqrtm(R%*%R) 
    • last objective function was not at minimum, possible problems in optimization 
    • ETAs were reset to zero during optimization; (Can control by foceiControl(resetEtaP=.)) 
-  Censoring (fit$censInformation): M3 censoring (gauss)
+  Censoring (fit$censInformation): No censoring
   Minimization message (fit$message):  
     Normal exit from bobyqa 
 
 ── Fit Data (object fit is a modified tibble): ──
-# A tibble: 420 × 28
+# A tibble: 413 × 25
   ID     TIME    DV  PRED   RES   WRES IPRED  IRES  IWRES CPRED  CRES  CWRES
   <fct> <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>  <dbl>
-1 1     0.222  507.  608. -100. -0.438  682. -175. -1.78   604. -96.7 -0.375
-2 1     0.591 1585. 1242.  343.  0.831 1402.  184.  0.912 1236. 349.   0.748
-3 1     0.993 2057. 1580.  477.  1.04  1787.  271.  1.05  1575. 483.   0.934
-# ℹ 417 more rows
-# ℹ 16 more variables: CENS <int>, lowerLim <dbl>, upperLim <dbl>,
-#   eta.cl <dbl>, eta.vc <dbl>, eta.ka <dbl>, depot <dbl>, central <dbl>,
-#   peripheral1 <dbl>, cl <dbl>, vc <dbl>, q <dbl>, vp <dbl>, ka <dbl>,
-#   tad <dbl>, dosenum <dbl>
+1 1     0.222  507.  606. -99.1 -0.440  682. -175. -1.76   603. -95.2 -0.375
+2 1     0.591 1585. 1240. 346.   0.853 1400.  186.  0.912 1233. 352.   0.768
+3 1     0.993 2057. 1577. 481.   1.07  1784.  274.  1.06  1571. 487.   0.957
+# ℹ 410 more rows
+# ℹ 13 more variables: eta.cl <dbl>, eta.vc <dbl>, eta.ka <dbl>, depot <dbl>,
+#   central <dbl>, peripheral1 <dbl>, cl <dbl>, vc <dbl>, q <dbl>, vp <dbl>,
+#   ka <dbl>, tad <dbl>, dosenum <dbl>

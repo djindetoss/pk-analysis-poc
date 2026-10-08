@@ -159,9 +159,9 @@ replay or re-render uses the stored spec — the LLM is never called again to re
 - **M1**: QC removes BLQ records before estimation (count logged).
 - **M3**: QC keeps BLQ records with `DV = LLOQ` and `CENS = 1`. In nlmixr2, `CENS = 1` means the observation is
   left-censored with `DV` as the upper limit, and FOCEi then uses the likelihood contribution P(Y < LLOQ)
-  (Beal's M3). A `LIMIT` column is not needed for M3 (it would set the lower bound, i.e. M4). The run summary
-  confirms it (`fit$censInformation`, and `n_censored` in `engine_results.json`). Checked against the nlmixr2
-  documentation on censoring and on nlmixr2 2.0.9 (local) and the version pinned in the image.
+  (Beal's M3). A `LIMIT` column is not needed for M3 (it would set the lower bound, i.e. M4). Verified on both
+  nlmixr2 2.0.9 (local) and 7.0.1 (image): `fit$censInformation` reports "M3 censoring" in each run's
+  `fit_summary.txt`, and `engine_results.json` reports 7 censored observations.
 
 ## Traceability and reproducibility
 
@@ -203,5 +203,5 @@ The container image bundles R packages under their own licences (mostly GPL).
 - `linCmt()` (analytical solution) is used for speed; parameters are named `cl, vc, q, vp, ka` internally and mapped to `CL, V2, Q, V3, KA` in outputs to avoid nlmixr2's ambiguous `V2/V3` naming.
 - RSE is reported on the natural scale as 100 × SE(log θ); nlmixr2's own `%RSE` column refers to the log-scale estimate.
 - `xpose.nlmixr2` was not used: GOF plots are drawn with `ggplot2` directly to keep the image smaller and the dependency surface minimal.
-- The local Mac used for development ran R 4.2.2 / nlmixr2 2.0.9; the image runs R 4.6.1 with the snapshot's nlmixr2. Numbers can differ slightly across the two; the manifests say which is which.
+- The local Mac used for development ran R 4.2.2 / nlmixr2 2.0.9; the image runs R 4.6.1 / nlmixr2 7.0.1. With identical script and data hashes the OFV differs in the fifth significant digit (different default optimiser); see the portability table in [DEMO_WALKTHROUGH.md](DEMO_WALKTHROUGH.md).
 - The mock extractor is a demonstration device, not an NLP component.

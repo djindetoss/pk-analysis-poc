@@ -1,6 +1,6 @@
 {
-  "run1": "R-20261008-140133-59e2",
-  "run2": "R-20261008-140147-6c24",
+  "run1": "R-20261008-140825-06d2",
+  "run2": "R-20261008-140840-6635",
   "out_of_scope": {
     "status": "rejected",
     "reasons": [
@@ -9,15 +9,15 @@
     ]
   },
   "rerender": {
-    "run_id": "R-20261008-140133-59e2",
-    "stored_script_hash": "a9459aee118ffa1510fb6f8866a206f4bb8bf715433aaf60eae5f9fbe77002c0",
-    "rerendered_script_hash": "a9459aee118ffa1510fb6f8866a206f4bb8bf715433aaf60eae5f9fbe77002c0",
+    "run_id": "R-20261008-140825-06d2",
+    "stored_script_hash": "41f519daf7a1adac8e51bef28150365230ef97a2c5e983f2d5d6962366ae729d",
+    "rerendered_script_hash": "41f519daf7a1adac8e51bef28150365230ef97a2c5e983f2d5d6962366ae729d",
     "identical": true,
     "template_hash_unchanged": true
   },
   "replay": {
-    "original_run_id": "R-20261008-140133-59e2",
-    "replay_run_id": "R-20261008-140202-50d1",
+    "original_run_id": "R-20261008-140825-06d2",
+    "replay_run_id": "R-20261008-140855-e903",
     "script_hash_identical": true,
     "prepared_data_hash_identical": true,
     "ofv_original": 4372.93333404885,
@@ -43,8 +43,8 @@
       "OPENBLAS_NUM_THREADS": "1",
       "GLIBC_TUNABLES": "glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4"
     },
-    "image_original": "ghcr.io/djindetoss/pk-analysis-poc:sha-ab072d0",
-    "image_replay": "ghcr.io/djindetoss/pk-analysis-poc:sha-ab072d0"
+    "image_original": "ghcr.io/djindetoss/pk-analysis-poc:sha-0a6e9da",
+    "image_replay": "ghcr.io/djindetoss/pk-analysis-poc:sha-0a6e9da"
   },
   "history_page": "/app/runs/index.html",
   "extractor": "mock",

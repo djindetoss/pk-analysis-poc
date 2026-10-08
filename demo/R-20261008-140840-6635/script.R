@@ -1,6 +1,6 @@
 # =============================================================================
 # GENERATED SCRIPT - DO NOT EDIT BY HAND
-# Template : pk_2cmt_oral_v1 (template version 1.0.2, catalogue 1.0.2)
+# Template : pk_2cmt_oral_v1 (template version 1.0.3, catalogue 1.0.3)
 # Produced by the deterministic template engine; no part of this script was
 # written by a language model. Any modification requires a new template version.
 #
@@ -151,9 +151,10 @@ write.csv(ind, file.path(out_dir, "individual_parameters.csv"), row.names = FALS
 pkg <- c("nlmixr2", "nlmixr2est", "rxode2", "lotri", "ggplot2", "jsonlite")
 versions <- lapply(setNames(pkg, pkg), function(x) safe(as.character(packageVersion(x)), NA))
 versions[["R"]] <- paste(R.version$major, R.version$minor, sep = ".")
-# resolve symlinks: on Ubuntu, libblas.so.3 may point to OpenBLAS or to the reference BLAS
-versions[["BLAS"]] <- safe(basename(normalizePath(extSoftVersion()[["BLAS"]])), NA)
-versions[["LAPACK"]] <- safe(basename(normalizePath(La_library())), NA)
+# full resolved paths: on Ubuntu, libblas.so.3 is a symlink to OpenBLAS or to the reference BLAS,
+# whose files carry the same name (e.g. .../openblas-pthread/libblas.so.3)
+versions[["BLAS"]] <- safe(normalizePath(extSoftVersion()[["BLAS"]]), NA)
+versions[["LAPACK"]] <- safe(normalizePath(La_library()), NA)
 
 results <- list(
   estimation_method = ESTIMATION,

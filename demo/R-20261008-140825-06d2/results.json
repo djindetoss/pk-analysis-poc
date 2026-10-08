@@ -1,8 +1,8 @@
 {
-  "run_id": "R-20261008-140202-50d1",
-  "parent_run_id": "R-20261008-140133-59e2",
+  "run_id": "R-20261008-140825-06d2",
+  "parent_run_id": null,
   "analysis_type": "primary",
-  "purpose": "replay",
+  "purpose": "analysis",
   "spec": {
     "compartments": 2,
     "absorption": "first_order",
@@ -353,7 +353,7 @@
       "ETAs were reset to zero during optimization; (Can control by foceiControl(resetEtaP=.))"
     ],
     "resumed_from_checkpoint": false,
-    "elapsed_seconds": 11.8192279338837,
+    "elapsed_seconds": 11.8718655109406,
     "seed": 20240607,
     "versions": {
       "nlmixr2": "7.0.1",
@@ -363,8 +363,8 @@
       "ggplot2": "4.0.3",
       "jsonlite": "2.0.0",
       "R": "4.6.1",
-      "BLAS": "libblas.so.3",
-      "LAPACK": "libopenblasp-r0.3.26.so"
+      "BLAS": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3",
+      "LAPACK": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so"
     },
     "platform": "x86_64-pc-linux-gnu"
   }

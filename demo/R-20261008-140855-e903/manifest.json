@@ -1,13 +1,13 @@
 {
-  "run_id": "R-20261008-140133-59e2",
-  "parent_run_id": null,
-  "root_run_id": "R-20261008-140133-59e2",
-  "purpose": "analysis",
+  "run_id": "R-20261008-140855-e903",
+  "parent_run_id": "R-20261008-140825-06d2",
+  "root_run_id": "R-20261008-140825-06d2",
+  "purpose": "replay",
   "analysis_type": "primary",
   "sensitivity_fields": [],
   "status": "completed",
-  "created_at": "2026-10-08T14:01:33Z",
-  "completed_at": "2026-10-08T14:01:47Z",
+  "created_at": "2026-10-08T14:08:55Z",
+  "completed_at": "2026-10-08T14:09:10Z",
   "spec": {
     "compartments": 2,
     "absorption": "first_order",
@@ -35,11 +35,11 @@
   "methodology_hash": "b654e16c214dc3976105d8ac0299bbdd62f10838806e6f9b8c4930f04667771a",
   "template": {
     "id": "pk_2cmt_oral_v1",
-    "version": "1.0.2",
-    "hash": "3fb45996fdf58a91f7ddc09bcb0d9d6ab999a21961482dfde94bd8735b95b831",
-    "catalogue_version": "1.0.2"
+    "version": "1.0.3",
+    "hash": "589f254e36326ab2ae18dce251949169b318f7e59c79210d33428f972dc38600",
+    "catalogue_version": "1.0.3"
   },
-  "script_hash": "a9459aee118ffa1510fb6f8866a206f4bb8bf715433aaf60eae5f9fbe77002c0",
+  "script_hash": "41f519daf7a1adac8e51bef28150365230ef97a2c5e983f2d5d6962366ae729d",
   "seed": 20240607,
   "input_data": {
     "raw_file": "data/raw/adpc_synthetic.csv",
@@ -47,18 +47,15 @@
     "prepared_hash": "643cf77a70d32f3e284a6391b2438c2c1ee0b95f85d8b6c246098e4ef7f82494"
   },
   "extractor": {
-    "name": "mock",
-    "model": "rule-based",
-    "prompt_version": "mock_v1",
-    "job_ids": [
-      "J-01262942cd",
-      "J-32dfd03233"
-    ]
+    "name": null,
+    "model": null,
+    "prompt_version": null,
+    "job_ids": []
   },
   "confirmation": {
-    "at": "2026-10-08T14:01:33Z",
-    "by": "auto-confirm",
-    "mode": "auto-confirm (demo)"
+    "at": "2026-10-08T14:08:55Z",
+    "by": "system",
+    "mode": "replay of a confirmed spec"
   },
   "packages": {
     "python": {
@@ -77,8 +74,8 @@
       "ggplot2": "4.0.3",
       "jsonlite": "2.0.0",
       "R": "4.6.1",
-      "BLAS": "libblas.so.3",
-      "LAPACK": "libopenblasp-r0.3.26.so"
+      "BLAS": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3",
+      "LAPACK": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so"
     }
   },
   "environment": {
@@ -90,8 +87,8 @@
       "OPENBLAS_NUM_THREADS": "1",
       "GLIBC_TUNABLES": "glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4"
     },
-    "container_image": "ghcr.io/djindetoss/pk-analysis-poc:sha-ab072d0",
-    "git_commit": "ab072d0280c0cd60404dfb1f2f28915f7241138b",
+    "container_image": "ghcr.io/djindetoss/pk-analysis-poc:sha-0a6e9da",
+    "git_commit": "0a6e9dae5c8c635dfa9d33217cc3cb66481a437d",
     "python_executable": "/opt/venv/bin/python"
   },
   "tool_version": "0.1.0",
@@ -110,18 +107,17 @@
     "resumed_from_checkpoint": false
   },
   "outputs": {
-    "script.R": "a9459aee118ffa1510fb6f8866a206f4bb8bf715433aaf60eae5f9fbe77002c0",
+    "script.R": "41f519daf7a1adac8e51bef28150365230ef97a2c5e983f2d5d6962366ae729d",
     "spec.json": "99c59b92bf9fc620e78e9f58a9ad14ff92dfb852750621d96233aa533b03f1c2",
     "prepared_data.csv": "643cf77a70d32f3e284a6391b2438c2c1ee0b95f85d8b6c246098e4ef7f82494",
     "qc_log.json": "d11e1d61607beb897323515cd5a19fa026886481edbf1a264dec6f599adf9c63",
-    "engine_results.json": "93c7869ab9af44790728d467d0972ebb1771291033fcf06d35807b5dcfc761f2",
-    "results.json": "e9bd64768a3888ec3a6aa329f06c3f48f272bd8f1859a6576d44bd2c851aaa68",
+    "engine_results.json": "d27dffff423ba00d12db92f6d1801a2ff02f383fcbdec87a61cfb6683fac0bf7",
+    "results.json": "7213bfb28b7980e4b930e98d6bf975d08a0fb73da2f453c239ae9dc4c2d516d7",
     "comparison.csv": "445d5901878463d62dfa5fc441b5b369bd04458d112da90735511d9db2e7d2f2",
     "individual_parameters.csv": "25e3f1b16b62c8d462b7f9f24646cdc45b5c6193b7377c8c8e513d0e3f790c33",
-    "fit.rds": "545110688f87f5ba717e88b65ba7595e223ad9869d2f29f481935f9157cc2ae0",
-    "report.html": "d50b3b92d51abf5785c6c8deed4546202ffa932a128537841e8ad5f758c8772c",
-    "engine.log": "5ef2e96dad486ac7c2637a5521215e5e68b701074af43dab335e86979491e5ec"
+    "fit.rds": "03094ae61820b045c94c363010bd9974950a561b8d525a638f9dd9b4fe282c29",
+    "report.html": "deceab17d9867a2291722e43ca04581c812b30973d181de9f6812b3b686f500e",
+    "engine.log": "268cc3552c3bdbcddf13d193981920bb1b1e684f02c96d6ff5e69c5d52e18e3c"
   },
-  "request_prompt_hash": "3c85327d7417dfcc3e3852c5f74c8462505acdc9d7dbdb44cf9c4a2d2bfe283d",
   "comparable": true
 }

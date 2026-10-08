@@ -1,15 +1,15 @@
 {
-  "run_id": "R-20261008-140147-6c24",
-  "parent_run_id": "R-20261008-140133-59e2",
-  "root_run_id": "R-20261008-140133-59e2",
+  "run_id": "R-20261008-140840-6635",
+  "parent_run_id": "R-20261008-140825-06d2",
+  "root_run_id": "R-20261008-140825-06d2",
   "purpose": "analysis",
   "analysis_type": "sensitivity",
   "sensitivity_fields": [
     "blq_method"
   ],
   "status": "completed",
-  "created_at": "2026-10-08T14:01:47Z",
-  "completed_at": "2026-10-08T14:02:02Z",
+  "created_at": "2026-10-08T14:08:40Z",
+  "completed_at": "2026-10-08T14:08:55Z",
   "spec": {
     "compartments": 2,
     "absorption": "first_order",
@@ -37,11 +37,11 @@
   "methodology_hash": "15de490dc0bac871c1176633475cba04a3be6b1269daf85223fe38a62eed9bde",
   "template": {
     "id": "pk_2cmt_oral_v1",
-    "version": "1.0.2",
-    "hash": "3fb45996fdf58a91f7ddc09bcb0d9d6ab999a21961482dfde94bd8735b95b831",
-    "catalogue_version": "1.0.2"
+    "version": "1.0.3",
+    "hash": "589f254e36326ab2ae18dce251949169b318f7e59c79210d33428f972dc38600",
+    "catalogue_version": "1.0.3"
   },
-  "script_hash": "64f30af8adeb574b3e5c8f966420dd88ff5f416ddf2abb60027cd16881348998",
+  "script_hash": "fdffd00a137b56c3daa89e23c5ac8b89b3918ed8e8ca2f41756e74f8b8f8b03b",
   "seed": 20240607,
   "input_data": {
     "raw_file": "data/raw/adpc_synthetic.csv",
@@ -53,11 +53,11 @@
     "model": "rule-based",
     "prompt_version": "mock_v1",
     "job_ids": [
-      "J-45144303db"
+      "J-a39da901fa"
     ]
   },
   "confirmation": {
-    "at": "2026-10-08T14:01:47Z",
+    "at": "2026-10-08T14:08:40Z",
     "by": "auto-confirm",
     "mode": "auto-confirm (demo)"
   },
@@ -78,8 +78,8 @@
       "ggplot2": "4.0.3",
       "jsonlite": "2.0.0",
       "R": "4.6.1",
-      "BLAS": "libblas.so.3",
-      "LAPACK": "libopenblasp-r0.3.26.so"
+      "BLAS": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3",
+      "LAPACK": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so"
     }
   },
   "environment": {
@@ -91,8 +91,8 @@
       "OPENBLAS_NUM_THREADS": "1",
       "GLIBC_TUNABLES": "glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4"
     },
-    "container_image": "ghcr.io/djindetoss/pk-analysis-poc:sha-ab072d0",
-    "git_commit": "ab072d0280c0cd60404dfb1f2f28915f7241138b",
+    "container_image": "ghcr.io/djindetoss/pk-analysis-poc:sha-0a6e9da",
+    "git_commit": "0a6e9dae5c8c635dfa9d33217cc3cb66481a437d",
     "python_executable": "/opt/venv/bin/python"
   },
   "tool_version": "0.1.0",
@@ -107,21 +107,21 @@
   },
   "engine": {
     "returncode": 0,
-    "elapsed_s": 15.1,
+    "elapsed_s": 15.0,
     "resumed_from_checkpoint": false
   },
   "outputs": {
-    "script.R": "64f30af8adeb574b3e5c8f966420dd88ff5f416ddf2abb60027cd16881348998",
+    "script.R": "fdffd00a137b56c3daa89e23c5ac8b89b3918ed8e8ca2f41756e74f8b8f8b03b",
     "spec.json": "1948614bd4e9466b39400a1043ef9aeb2445ef4df11e98d5022a97f0fcfbc512",
     "prepared_data.csv": "38d30404d452db3275fe44a8f1a96a4e78d3d35377ba67e53bfba0a645a67ff2",
     "qc_log.json": "0e27caa5c03d9c6cf337ac6c806f776a517bbea3f329cb82ddfa56dc5e2ac00d",
-    "engine_results.json": "6651998b8a194663a2215f7b6091546fd5eb498ff35738aeaf9eaac8d6e7a834",
-    "results.json": "742ac1383fa9420727a768696c7b47b44ff62c66899198742d0ef08a5cfbc93e",
+    "engine_results.json": "834cd39b7c23c5610c3f7587d38fedcb95369e540867ec3b4d53ccaaf631f1f5",
+    "results.json": "c022cf9977b80748a7700dbbba3ef70ecf7bd47f1e2b901bf2c6a158ce5fd54e",
     "comparison.csv": "1fe7805e871e9670b3f684a80720f7075947d9828a2a33af8c69187e0f13ced9",
     "individual_parameters.csv": "074dedefc5f0279eaa8fccbe227e6bd5f3b72a4c82a86a1646003336ce1b2009",
-    "fit.rds": "5111ccd7d56fe69fcb11bf039142e6e0be767d89856503b35113f68ccb5ecbdd",
-    "report.html": "c32fae1dfe72b4d71c6f6fa2950d4af7214abba7066a49ef6ed893434ce3d50a",
-    "engine.log": "e2b9007a265ea2edff03fc7c8c8975186dc8c7abc6083df903cff2eb452d2dca"
+    "fit.rds": "2eb9cd01ba54e66d35499e984625bdc04c55ff3e9ad02d9c0aa59d11f298e1cb",
+    "report.html": "7d3d5570130ebfd8042ddcefa55e7232a9750877c8dc7f62071cef8d49c918ed",
+    "engine.log": "9dd23768a0937e326aa72e13d344c7165260a71cad9a9872b9171d35aff27f20"
   },
   "request_prompt_hash": "3c637a48a56bddf41c964b3397601b316a90351286a9cd335034d33db914d29f",
   "comparable": true

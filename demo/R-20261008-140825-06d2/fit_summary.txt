@@ -6,9 +6,9 @@ FOCEi 4372.933 5151.977 5192.211      -2565.988        578048.5        14.81826
 ── Time (sec fit$time): ──
 
            setup optimize covariance preprocess postprocess table compress
-elapsed 3.330101 3.517798   4.230119      0.051       0.034 0.042    0.001
+elapsed 3.356496 3.509965   4.257301      0.047       0.035 0.045    0.001
             other
-elapsed 0.5849824
+elapsed 0.5922378
 
 ── Population Parameters (fit$parFixed or fit$parFixedDf): ──
 

@@ -1,0 +1,212 @@
+# =============================================================================
+# GENERATED SCRIPT - DO NOT EDIT BY HAND
+# Template : pk_2cmt_oral_v1 (template version 1.0.2, catalogue 1.0.2)
+# Produced by the deterministic template engine; no part of this script was
+# written by a language model. Any modification requires a new template version.
+#
+# Analysis spec (methodology fields, canonical JSON):
+# {"absorption":"first_order","blq_method":"M1","compartments":2,"error_model":"combined","estimation":"FOCEi","iiv":["CL","V2","KA"],"route":"oral","template":"pk_2cmt_oral_v1"}
+# =============================================================================
+suppressPackageStartupMessages({
+  library(nlmixr2)
+  library(jsonlite)
+  library(ggplot2)
+})
+options(repos = NULL, warn = 1) # no package download, no network access needed
+
+args <- commandArgs(trailingOnly = TRUE)
+if (length(args) < 2) stop("usage: Rscript script.R <prepared_data.csv> <output_dir>")
+data_file <- args[[1]]
+out_dir <- args[[2]]
+dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+
+SEED <- 20240607L
+set.seed(SEED)
+rxode2::setRxThreads(1L) # single thread: bit-for-bit reproducible estimates
+
+dat <- read.csv(data_file)
+
+
+# ---- Model: 2-compartment, first-order absorption ----------------------------
+pk_model <- function() {
+  ini({
+    tcl <- log(5.0)
+    label("log CL/F (L/h)")
+    tvc <- log(50.0)
+    label("log V2/F (L)")
+    tq <- log(10.0)
+    label("log Q/F (L/h)")
+    tvp <- log(100.0)
+    label("log V3/F (L)")
+    tka <- log(1.0)
+    label("log KA (1/h)")
+    eta.cl ~ 0.1
+    eta.vc ~ 0.1
+    eta.ka ~ 0.1
+    add.sd <- 10.0
+    label("Additive residual SD (ng/mL)")
+    prop.sd <- 0.1
+    label("Proportional residual SD (fraction)")
+  })
+  model({
+    cl <- exp(tcl + eta.cl)
+    vc <- exp(tvc + eta.vc)
+    q <- exp(tq)
+    vp <- exp(tvp)
+    ka <- exp(tka + eta.ka)
+    # linCmt(): analytical 2-compartment solution with first-order absorption
+    # dose in mg, volumes in L -> mg/L; x 1000 -> ng/mL
+    cp <- 1000 * linCmt()
+    cp ~ add(add.sd) + prop(prop.sd)
+  })
+}
+
+PARAMS <- list(
+  list(name = "CL", theta = "tcl", r = "cl", eta = "eta.cl", fixed = FALSE),
+  list(name = "V2", theta = "tvc", r = "vc", eta = "eta.vc", fixed = FALSE),
+  list(name = "Q", theta = "tq", r = "q", eta = NA, fixed = FALSE),
+  list(name = "V3", theta = "tvp", r = "vp", eta = NA, fixed = FALSE),
+  list(name = "KA", theta = "tka", r = "ka", eta = "eta.ka", fixed = FALSE)
+)
+ESTIMATION <- "FOCEi"
+BLQ_METHOD <- "M1"
+
+
+# ---- Estimation (checkpointed) ---------------------------------------------
+# If fit.rds exists (crashed or interrupted run), estimation is skipped and
+# the script resumes at post-processing.
+fit_path <- file.path(out_dir, "fit.rds")
+fit_warnings <- character(0)
+t0 <- Sys.time()
+if (file.exists(fit_path)) {
+  message("Checkpoint found: loading ", fit_path, " (estimation skipped)")
+  fit <- readRDS(fit_path)
+  resumed <- TRUE
+} else {
+  ctl <- foceiControl(print = 0L, covMethod = "r,s")
+  est <- "focei"
+  fit <- withCallingHandlers(
+    nlmixr2(pk_model, dat, est = est, control = ctl, table = tableControl(cwres = TRUE)),
+    warning = function(w) {
+      fit_warnings <<- c(fit_warnings, conditionMessage(w))
+      invokeRestart("muffleWarning")
+    }
+  )
+  saveRDS(fit, fit_path)
+  resumed <- FALSE
+}
+elapsed <- as.numeric(difftime(Sys.time(), t0, units = "secs"))
+
+# ---- Post-processing -------------------------------------------------------
+safe <- function(expr, default = NA) tryCatch(expr, error = function(e) default)
+
+pf <- as.data.frame(fit$parFixedDf)
+col <- function(name) if (name %in% names(pf)) pf[[name]] else rep(NA_real_, nrow(pf))
+omega <- fit$omega
+
+estimates <- lapply(PARAMS, function(p) {
+  i <- match(p$theta, rownames(pf))
+  se_log <- col("SE")[i]
+  est_log <- col("Estimate")[i]
+  rse <- col("%RSE")[i]
+  # %RSE reported by nlmixr2 for log-parameters is SE/|log estimate|; on the natural
+  # scale the approximate relative SE of a log-normal parameter is SE(log) * 100.
+  list(
+    parameter = p$name,
+    estimate = unname(exp(est_log)),
+    log_estimate = unname(est_log),
+    se_log = unname(se_log),
+    rse_percent = if (is.na(se_log)) NA else unname(100 * se_log),
+    ci_lower = if (is.na(se_log)) NA else unname(exp(est_log - qnorm(0.975) * se_log)),
+    ci_upper = if (is.na(se_log)) NA else unname(exp(est_log + qnorm(0.975) * se_log)),
+    fixed = p$fixed,
+    iiv_cv_percent = if (is.na(p$eta)) NA else unname(100 * sqrt(exp(omega[p$eta, p$eta]) - 1)),
+    shrinkage_percent = if (is.na(p$eta)) NA else unname(safe(fit$shrink[7, p$eta]))
+  )
+})
+
+residual <- list()
+for (nm in c("add.sd", "prop.sd")) {
+  i <- match(nm, rownames(pf))
+  if (!is.na(i)) {
+    residual[[nm]] <- list(estimate = unname(col("Estimate")[i]), se = unname(col("SE")[i]),
+                           rse_percent = unname(col("%RSE")[i]))
+  }
+}
+
+cov_method <- safe(as.character(fit$covMethod), "")
+if (length(cov_method) == 0) cov_method <- ""
+opt_message <- safe(paste(as.character(fit$message), collapse = "; "), "")
+bad_msg <- grepl("false|singular|limit|fail|error|abnormal", opt_message, ignore.case = TRUE)
+covariance_ok <- !is.null(safe(fit$cov, NULL)) && nzchar(cov_method) && !grepl("fail", cov_method, ignore.case = TRUE)
+
+fd <- as.data.frame(fit)
+if ("CENS" %in% names(fd)) fd_obs <- fd[fd$CENS == 0, ] else fd_obs <- fd
+
+r_names <- vapply(PARAMS, function(p) p$r, character(1))
+ind <- fd[!duplicated(fd$ID), c("ID", intersect(r_names, names(fd))), drop = FALSE]
+names(ind) <- c("ID", vapply(PARAMS[match(setdiff(names(ind), "ID"), r_names)], function(p) p$name, character(1)))
+write.csv(ind, file.path(out_dir, "individual_parameters.csv"), row.names = FALSE)
+
+pkg <- c("nlmixr2", "nlmixr2est", "rxode2", "lotri", "ggplot2", "jsonlite")
+versions <- lapply(setNames(pkg, pkg), function(x) safe(as.character(packageVersion(x)), NA))
+versions[["R"]] <- paste(R.version$major, R.version$minor, sep = ".")
+# resolve symlinks: on Ubuntu, libblas.so.3 may point to OpenBLAS or to the reference BLAS
+versions[["BLAS"]] <- safe(basename(normalizePath(extSoftVersion()[["BLAS"]])), NA)
+versions[["LAPACK"]] <- safe(basename(normalizePath(La_library())), NA)
+
+results <- list(
+  estimation_method = ESTIMATION,
+  blq_method = BLQ_METHOD,
+  ofv = unname(safe(fit$objf)),
+  aic = unname(safe(AIC(fit))),
+  n_subjects = length(unique(fd$ID)),
+  n_observations = nrow(fd),
+  n_censored = if ("CENS" %in% names(fd)) sum(fd$CENS != 0) else 0L,
+  optimizer_message = opt_message,
+  optimizer_message_ok = !bad_msg,
+  covariance_method = cov_method,
+  covariance_ok = covariance_ok,
+  estimates = estimates,
+  residual_error = residual,
+  warnings = unique(fit_warnings),
+  run_info = unique(safe(as.character(fit$runInfo), character(0))),
+  resumed_from_checkpoint = resumed,
+  elapsed_seconds = elapsed,
+  seed = SEED,
+  versions = versions,
+  platform = R.version$platform
+)
+write_json(results, file.path(out_dir, "engine_results.json"), auto_unbox = TRUE, digits = NA,
+           pretty = TRUE, na = "null", null = "null")
+writeLines(capture.output(print(fit)), file.path(out_dir, "fit_summary.txt"))
+
+# ---- Goodness-of-fit plots -------------------------------------------------
+theme_set(theme_bw(base_size = 11))
+save_plot <- function(p, name, w = 5, h = 4) ggsave(file.path(out_dir, name), p, width = w, height = h, dpi = 110)
+ident <- geom_abline(slope = 1, intercept = 0, colour = "grey40", linetype = 2)
+zero <- geom_hline(yintercept = 0, colour = "grey40", linetype = 2)
+pts <- geom_point(alpha = 0.5, size = 1.3, colour = "#1f5f8b")
+lo <- geom_smooth(method = "loess", formula = y ~ x, se = FALSE, colour = "#c0392b", linewidth = 0.7)
+
+save_plot(ggplot(fd_obs, aes(PRED, DV)) + pts + ident + lo + scale_x_log10() + scale_y_log10() +
+            labs(title = "DV vs PRED", x = "Population prediction (ng/mL)", y = "Observed (ng/mL)"), "gof_dv_pred.png")
+save_plot(ggplot(fd_obs, aes(IPRED, DV)) + pts + ident + lo + scale_x_log10() + scale_y_log10() +
+            labs(title = "DV vs IPRED", x = "Individual prediction (ng/mL)", y = "Observed (ng/mL)"), "gof_dv_ipred.png")
+save_plot(ggplot(fd_obs, aes(TIME, CWRES)) + pts + zero + lo +
+            labs(title = "CWRES vs TIME", x = "Time after dose (h)", y = "CWRES"), "gof_cwres_time.png")
+save_plot(ggplot(fd_obs, aes(PRED, CWRES)) + pts + zero + lo + scale_x_log10() +
+            labs(title = "CWRES vs PRED", x = "Population prediction (ng/mL)", y = "CWRES"), "gof_cwres_pred.png")
+ids <- head(sort(unique(fd$ID)), 6)
+sub <- fd[fd$ID %in% ids, ]
+save_plot(ggplot(sub, aes(TIME)) +
+            geom_point(aes(y = DV, shape = if ("CENS" %in% names(sub)) factor(CENS) else factor(0)), colour = "#1f5f8b") +
+            geom_line(aes(y = IPRED), colour = "#c0392b") +
+            geom_line(aes(y = PRED), colour = "grey40", linetype = 2) +
+            scale_y_log10() + facet_wrap(~ID, ncol = 3) +
+            scale_shape_manual(values = c(`0` = 16, `1` = 4), labels = c(`0` = "observed", `1` = "BLQ (censored)"), name = NULL) +
+            labs(title = "Individual profiles (solid: IPRED, dashed: PRED)", x = "Time after dose (h)", y = "Concentration (ng/mL)"),
+          "gof_individual.png", w = 8, h = 5)
+
+message(sprintf("Done in %.1f s. OFV = %.3f", elapsed, results$ofv))
+

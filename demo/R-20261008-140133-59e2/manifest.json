@@ -1,0 +1,127 @@
+{
+  "run_id": "R-20261008-140133-59e2",
+  "parent_run_id": null,
+  "root_run_id": "R-20261008-140133-59e2",
+  "purpose": "analysis",
+  "analysis_type": "primary",
+  "sensitivity_fields": [],
+  "status": "completed",
+  "created_at": "2026-10-08T14:01:33Z",
+  "completed_at": "2026-10-08T14:01:47Z",
+  "spec": {
+    "compartments": 2,
+    "absorption": "first_order",
+    "route": "oral",
+    "error_model": "combined",
+    "iiv": [
+      "CL",
+      "V2",
+      "KA"
+    ],
+    "estimation": "FOCEi",
+    "reference_values": {
+      "CL": 4.2,
+      "V2": 35.0,
+      "V3": 120.0,
+      "Q": 8.1,
+      "KA": 1.1,
+      "IIV_CL": 30.0
+    },
+    "analysis_type": "primary",
+    "blq_method": "M1",
+    "template": "pk_2cmt_oral_v1"
+  },
+  "spec_hash": "5c35bee5bc26c533ecfbf89e2cc3a004ae8575e9508e07875adba84dacdf6d07",
+  "methodology_hash": "b654e16c214dc3976105d8ac0299bbdd62f10838806e6f9b8c4930f04667771a",
+  "template": {
+    "id": "pk_2cmt_oral_v1",
+    "version": "1.0.2",
+    "hash": "3fb45996fdf58a91f7ddc09bcb0d9d6ab999a21961482dfde94bd8735b95b831",
+    "catalogue_version": "1.0.2"
+  },
+  "script_hash": "a9459aee118ffa1510fb6f8866a206f4bb8bf715433aaf60eae5f9fbe77002c0",
+  "seed": 20240607,
+  "input_data": {
+    "raw_file": "data/raw/adpc_synthetic.csv",
+    "raw_hash": "1cb7adff311dcd25660f2353d892964c98ad1932a6b69b6ed28c6ebfcaa48c6b",
+    "prepared_hash": "643cf77a70d32f3e284a6391b2438c2c1ee0b95f85d8b6c246098e4ef7f82494"
+  },
+  "extractor": {
+    "name": "mock",
+    "model": "rule-based",
+    "prompt_version": "mock_v1",
+    "job_ids": [
+      "J-01262942cd",
+      "J-32dfd03233"
+    ]
+  },
+  "confirmation": {
+    "at": "2026-10-08T14:01:33Z",
+    "by": "auto-confirm",
+    "mode": "auto-confirm (demo)"
+  },
+  "packages": {
+    "python": {
+      "python": "3.12.3",
+      "jinja2": "3.1.4",
+      "pandas": "2.2.3",
+      "numpy": "2.1.3",
+      "jsonschema": "4.23.0",
+      "typer": "0.12.5"
+    },
+    "r": {
+      "nlmixr2": "7.0.1",
+      "nlmixr2est": "7.1.0",
+      "rxode2": "5.1.7.1",
+      "lotri": "1.0.5",
+      "ggplot2": "4.0.3",
+      "jsonlite": "2.0.0",
+      "R": "4.6.1",
+      "BLAS": "libblas.so.3",
+      "LAPACK": "libopenblasp-r0.3.26.so"
+    }
+  },
+  "environment": {
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "cpu": "AMD EPYC 7763 64-Core Processor",
+    "math_env": {
+      "OPENBLAS_CORETYPE": "Prescott",
+      "OPENBLAS_NUM_THREADS": "1",
+      "GLIBC_TUNABLES": "glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4"
+    },
+    "container_image": "ghcr.io/djindetoss/pk-analysis-poc:sha-ab072d0",
+    "git_commit": "ab072d0280c0cd60404dfb1f2f28915f7241138b",
+    "python_executable": "/opt/venv/bin/python"
+  },
+  "tool_version": "0.1.0",
+  "settings": {
+    "tolerance": 0.2,
+    "rse_threshold": 50.0,
+    "qc": {
+      "ntime_abs_tol_h": 0.5,
+      "ntime_rel_tol": 0.1,
+      "blq_warn_fraction": 0.1
+    }
+  },
+  "engine": {
+    "returncode": 0,
+    "elapsed_s": 14.8,
+    "resumed_from_checkpoint": false
+  },
+  "outputs": {
+    "script.R": "a9459aee118ffa1510fb6f8866a206f4bb8bf715433aaf60eae5f9fbe77002c0",
+    "spec.json": "99c59b92bf9fc620e78e9f58a9ad14ff92dfb852750621d96233aa533b03f1c2",
+    "prepared_data.csv": "643cf77a70d32f3e284a6391b2438c2c1ee0b95f85d8b6c246098e4ef7f82494",
+    "qc_log.json": "d11e1d61607beb897323515cd5a19fa026886481edbf1a264dec6f599adf9c63",
+    "engine_results.json": "93c7869ab9af44790728d467d0972ebb1771291033fcf06d35807b5dcfc761f2",
+    "results.json": "e9bd64768a3888ec3a6aa329f06c3f48f272bd8f1859a6576d44bd2c851aaa68",
+    "comparison.csv": "445d5901878463d62dfa5fc441b5b369bd04458d112da90735511d9db2e7d2f2",
+    "individual_parameters.csv": "25e3f1b16b62c8d462b7f9f24646cdc45b5c6193b7377c8c8e513d0e3f790c33",
+    "fit.rds": "545110688f87f5ba717e88b65ba7595e223ad9869d2f29f481935f9157cc2ae0",
+    "report.html": "d50b3b92d51abf5785c6c8deed4546202ffa932a128537841e8ad5f758c8772c",
+    "engine.log": "5ef2e96dad486ac7c2637a5521215e5e68b701074af43dab335e86979491e5ec"
+  },
+  "request_prompt_hash": "3c85327d7417dfcc3e3852c5f74c8462505acdc9d7dbdb44cf9c4a2d2bfe283d",
+  "comparable": true
+}

@@ -1,0 +1,128 @@
+{
+  "run_id": "R-20261008-140147-6c24",
+  "parent_run_id": "R-20261008-140133-59e2",
+  "root_run_id": "R-20261008-140133-59e2",
+  "purpose": "analysis",
+  "analysis_type": "sensitivity",
+  "sensitivity_fields": [
+    "blq_method"
+  ],
+  "status": "completed",
+  "created_at": "2026-10-08T14:01:47Z",
+  "completed_at": "2026-10-08T14:02:02Z",
+  "spec": {
+    "compartments": 2,
+    "absorption": "first_order",
+    "route": "oral",
+    "error_model": "combined",
+    "iiv": [
+      "CL",
+      "V2",
+      "KA"
+    ],
+    "estimation": "FOCEi",
+    "reference_values": {
+      "CL": 4.2,
+      "V2": 35.0,
+      "V3": 120.0,
+      "Q": 8.1,
+      "KA": 1.1,
+      "IIV_CL": 30.0
+    },
+    "analysis_type": "sensitivity",
+    "blq_method": "M3",
+    "template": "pk_2cmt_oral_v1"
+  },
+  "spec_hash": "0030756b6dc1154888296838e116220220efa71e79063db429abd47172f527db",
+  "methodology_hash": "15de490dc0bac871c1176633475cba04a3be6b1269daf85223fe38a62eed9bde",
+  "template": {
+    "id": "pk_2cmt_oral_v1",
+    "version": "1.0.2",
+    "hash": "3fb45996fdf58a91f7ddc09bcb0d9d6ab999a21961482dfde94bd8735b95b831",
+    "catalogue_version": "1.0.2"
+  },
+  "script_hash": "64f30af8adeb574b3e5c8f966420dd88ff5f416ddf2abb60027cd16881348998",
+  "seed": 20240607,
+  "input_data": {
+    "raw_file": "data/raw/adpc_synthetic.csv",
+    "raw_hash": "1cb7adff311dcd25660f2353d892964c98ad1932a6b69b6ed28c6ebfcaa48c6b",
+    "prepared_hash": "38d30404d452db3275fe44a8f1a96a4e78d3d35377ba67e53bfba0a645a67ff2"
+  },
+  "extractor": {
+    "name": "mock",
+    "model": "rule-based",
+    "prompt_version": "mock_v1",
+    "job_ids": [
+      "J-45144303db"
+    ]
+  },
+  "confirmation": {
+    "at": "2026-10-08T14:01:47Z",
+    "by": "auto-confirm",
+    "mode": "auto-confirm (demo)"
+  },
+  "packages": {
+    "python": {
+      "python": "3.12.3",
+      "jinja2": "3.1.4",
+      "pandas": "2.2.3",
+      "numpy": "2.1.3",
+      "jsonschema": "4.23.0",
+      "typer": "0.12.5"
+    },
+    "r": {
+      "nlmixr2": "7.0.1",
+      "nlmixr2est": "7.1.0",
+      "rxode2": "5.1.7.1",
+      "lotri": "1.0.5",
+      "ggplot2": "4.0.3",
+      "jsonlite": "2.0.0",
+      "R": "4.6.1",
+      "BLAS": "libblas.so.3",
+      "LAPACK": "libopenblasp-r0.3.26.so"
+    }
+  },
+  "environment": {
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "cpu": "AMD EPYC 7763 64-Core Processor",
+    "math_env": {
+      "OPENBLAS_CORETYPE": "Prescott",
+      "OPENBLAS_NUM_THREADS": "1",
+      "GLIBC_TUNABLES": "glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4"
+    },
+    "container_image": "ghcr.io/djindetoss/pk-analysis-poc:sha-ab072d0",
+    "git_commit": "ab072d0280c0cd60404dfb1f2f28915f7241138b",
+    "python_executable": "/opt/venv/bin/python"
+  },
+  "tool_version": "0.1.0",
+  "settings": {
+    "tolerance": 0.2,
+    "rse_threshold": 50.0,
+    "qc": {
+      "ntime_abs_tol_h": 0.5,
+      "ntime_rel_tol": 0.1,
+      "blq_warn_fraction": 0.1
+    }
+  },
+  "engine": {
+    "returncode": 0,
+    "elapsed_s": 15.1,
+    "resumed_from_checkpoint": false
+  },
+  "outputs": {
+    "script.R": "64f30af8adeb574b3e5c8f966420dd88ff5f416ddf2abb60027cd16881348998",
+    "spec.json": "1948614bd4e9466b39400a1043ef9aeb2445ef4df11e98d5022a97f0fcfbc512",
+    "prepared_data.csv": "38d30404d452db3275fe44a8f1a96a4e78d3d35377ba67e53bfba0a645a67ff2",
+    "qc_log.json": "0e27caa5c03d9c6cf337ac6c806f776a517bbea3f329cb82ddfa56dc5e2ac00d",
+    "engine_results.json": "6651998b8a194663a2215f7b6091546fd5eb498ff35738aeaf9eaac8d6e7a834",
+    "results.json": "742ac1383fa9420727a768696c7b47b44ff62c66899198742d0ef08a5cfbc93e",
+    "comparison.csv": "1fe7805e871e9670b3f684a80720f7075947d9828a2a33af8c69187e0f13ced9",
+    "individual_parameters.csv": "074dedefc5f0279eaa8fccbe227e6bd5f3b72a4c82a86a1646003336ce1b2009",
+    "fit.rds": "5111ccd7d56fe69fcb11bf039142e6e0be767d89856503b35113f68ccb5ecbdd",
+    "report.html": "c32fae1dfe72b4d71c6f6fa2950d4af7214abba7066a49ef6ed893434ce3d50a",
+    "engine.log": "e2b9007a265ea2edff03fc7c8c8975186dc8c7abc6083df903cff2eb452d2dca"
+  },
+  "request_prompt_hash": "3c637a48a56bddf41c964b3397601b316a90351286a9cd335034d33db914d29f",
+  "comparable": true
+}

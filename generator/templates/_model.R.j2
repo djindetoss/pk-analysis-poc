@@ -1,0 +1,42 @@
+pk_model <- function() {
+  ini({
+{%- for p in params %}
+    {{ p.theta }} <- {% if p.fixed %}fix({{ p.init }}){% else %}{{ p.init }}{% endif %}
+    label("log {{ p.label }}")
+{%- endfor %}
+{%- for p in params if p.iiv %}
+    {{ p.eta }} ~ {{ omega_init }}
+{%- endfor %}
+{%- if error_model in ("additive", "combined") %}
+    add.sd <- {{ add_init }}
+    label("Additive residual SD (ng/mL)")
+{%- endif %}
+{%- if error_model in ("proportional", "combined") %}
+    prop.sd <- {{ prop_init }}
+    label("Proportional residual SD (fraction)")
+{%- endif %}
+  })
+  model({
+{%- for p in params %}
+    {{ p.r }} <- exp({{ p.theta }}{% if p.iiv %} + {{ p.eta }}{% endif %})
+{%- endfor %}
+    # linCmt(): analytical {{ compartments }}-compartment solution with first-order absorption
+    # dose in mg, volumes in L -> mg/L; x 1000 -> ng/mL
+    cp <- 1000 * linCmt()
+{%- if error_model == "additive" %}
+    cp ~ add(add.sd)
+{%- elif error_model == "proportional" %}
+    cp ~ prop(prop.sd)
+{%- else %}
+    cp ~ add(add.sd) + prop(prop.sd)
+{%- endif %}
+  })
+}
+
+PARAMS <- list(
+{%- for p in params %}
+  list(name = "{{ p.name }}", theta = "{{ p.theta }}", r = "{{ p.r }}", eta = {% if p.iiv %}"{{ p.eta }}"{% else %}NA{% endif %}, fixed = {{ "TRUE" if p.fixed else "FALSE" }}){{ "," if not loop.last }}
+{%- endfor %}
+)
+ESTIMATION <- "{{ estimation }}"
+BLQ_METHOD <- "{{ blq_method }}"

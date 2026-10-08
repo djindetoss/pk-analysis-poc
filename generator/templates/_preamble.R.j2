@@ -1,0 +1,27 @@
+# =============================================================================
+# GENERATED SCRIPT - DO NOT EDIT BY HAND
+# Template : {{ template_id }} (template version {{ template_version }}, catalogue {{ catalogue_version }})
+# Produced by the deterministic template engine; no part of this script was
+# written by a language model. Any modification requires a new template version.
+#
+# Analysis spec (methodology fields, canonical JSON):
+# {{ spec_json }}
+# =============================================================================
+suppressPackageStartupMessages({
+  library(nlmixr2)
+  library(jsonlite)
+  library(ggplot2)
+})
+options(repos = NULL, warn = 1) # no package download, no network access needed
+
+args <- commandArgs(trailingOnly = TRUE)
+if (length(args) < 2) stop("usage: Rscript script.R <prepared_data.csv> <output_dir>")
+data_file <- args[[1]]
+out_dir <- args[[2]]
+dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+
+SEED <- {{ seed }}L
+set.seed(SEED)
+rxode2::setRxThreads(1L) # single thread: bit-for-bit reproducible estimates
+
+dat <- read.csv(data_file)

@@ -1,0 +1,2 @@
+# Optional: only needed for the Anthropic extractor (ANTHROPIC_API_KEY set)
+anthropic==1.12.1

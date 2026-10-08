@@ -1,0 +1,124 @@
+{
+  "run_id": "R-20261008-135110-852b",
+  "parent_run_id": "R-20261008-135057-89f3",
+  "root_run_id": "R-20261008-135057-89f3",
+  "purpose": "analysis",
+  "analysis_type": "sensitivity",
+  "sensitivity_fields": [
+    "blq_method"
+  ],
+  "status": "completed",
+  "created_at": "2026-10-08T13:51:10Z",
+  "completed_at": "2026-10-08T13:51:24Z",
+  "spec": {
+    "compartments": 2,
+    "absorption": "first_order",
+    "route": "oral",
+    "error_model": "combined",
+    "iiv": [
+      "CL",
+      "V2",
+      "KA"
+    ],
+    "estimation": "FOCEi",
+    "reference_values": {
+      "CL": 4.2,
+      "V2": 35.0,
+      "V3": 120.0,
+      "Q": 8.1,
+      "KA": 1.1,
+      "IIV_CL": 30.0
+    },
+    "analysis_type": "sensitivity",
+    "blq_method": "M3",
+    "template": "pk_2cmt_oral_v1"
+  },
+  "spec_hash": "0030756b6dc1154888296838e116220220efa71e79063db429abd47172f527db",
+  "methodology_hash": "15de490dc0bac871c1176633475cba04a3be6b1269daf85223fe38a62eed9bde",
+  "template": {
+    "id": "pk_2cmt_oral_v1",
+    "version": "1.0.1",
+    "hash": "9b9b134ad8ffa5084d7e9cfbdc62d37555f3944a4969b5b470747564e3074249",
+    "catalogue_version": "1.0.1"
+  },
+  "script_hash": "85f12907340ec6c706df27140554de58cff8ac23256b5a3a58a46b9d0b7146f1",
+  "seed": 20240607,
+  "input_data": {
+    "raw_file": "data/raw/adpc_synthetic.csv",
+    "raw_hash": "1cb7adff311dcd25660f2353d892964c98ad1932a6b69b6ed28c6ebfcaa48c6b",
+    "prepared_hash": "38d30404d452db3275fe44a8f1a96a4e78d3d35377ba67e53bfba0a645a67ff2"
+  },
+  "extractor": {
+    "name": "mock",
+    "model": "rule-based",
+    "prompt_version": "mock_v1",
+    "job_ids": [
+      "J-593d9019aa"
+    ]
+  },
+  "confirmation": {
+    "at": "2026-10-08T13:51:10Z",
+    "by": "auto-confirm",
+    "mode": "auto-confirm (demo)"
+  },
+  "packages": {
+    "python": {
+      "python": "3.12.3",
+      "jinja2": "3.1.4",
+      "pandas": "2.2.3",
+      "numpy": "2.1.3",
+      "jsonschema": "4.23.0",
+      "typer": "0.12.5"
+    },
+    "r": {
+      "nlmixr2": "7.0.1",
+      "nlmixr2est": "7.1.0",
+      "rxode2": "5.1.7.1",
+      "lotri": "1.0.5",
+      "ggplot2": "4.0.3",
+      "jsonlite": "2.0.0",
+      "R": "4.6.1",
+      "BLAS": "libblas.so.3",
+      "LAPACK": "libopenblasp-r0.3.26.so"
+    }
+  },
+  "environment": {
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "math_env": {},
+    "container_image": "ghcr.io/djindetoss/pk-analysis-poc:sha-12ee128",
+    "git_commit": "12ee1285923342eefe2a3df574e0bf6ad3ad84a0",
+    "python_executable": "/opt/venv/bin/python"
+  },
+  "tool_version": "0.1.0",
+  "settings": {
+    "tolerance": 0.2,
+    "rse_threshold": 50.0,
+    "qc": {
+      "ntime_abs_tol_h": 0.5,
+      "ntime_rel_tol": 0.1,
+      "blq_warn_fraction": 0.1
+    }
+  },
+  "engine": {
+    "returncode": 0,
+    "elapsed_s": 13.8,
+    "resumed_from_checkpoint": false
+  },
+  "outputs": {
+    "script.R": "85f12907340ec6c706df27140554de58cff8ac23256b5a3a58a46b9d0b7146f1",
+    "spec.json": "1948614bd4e9466b39400a1043ef9aeb2445ef4df11e98d5022a97f0fcfbc512",
+    "prepared_data.csv": "38d30404d452db3275fe44a8f1a96a4e78d3d35377ba67e53bfba0a645a67ff2",
+    "qc_log.json": "0e27caa5c03d9c6cf337ac6c806f776a517bbea3f329cb82ddfa56dc5e2ac00d",
+    "engine_results.json": "dfea1b491e635ec06c201133e69c66e4ac274d54799d5e8e13b3334af808f266",
+    "results.json": "96699f9a71e03d6d41c4783eacb33a05e9a77510b9ab771c5e5841e4db304642",
+    "comparison.csv": "5e43be8e66a5dd4382c0ee212c8c2ef33a1591b013558a2ece34f79e9646bccd",
+    "individual_parameters.csv": "9ca0440658d17aeda79eab3cbb25bbbe180a1407db735fc1a9df3b9bb3577480",
+    "fit.rds": "cf0ef0e93e8cf3a38ee561fce3d97b7b556a6488b3cfb31763600f664431eb0c",
+    "report.html": "6428762ffbf5ce5ab4eff59fa0d4d404302e8fcc312cc43edecced6a86c96060",
+    "engine.log": "613266e1d3a2407f8a55ad514d6e9225ff9223059403ed4a9dd22bd646ca2677"
+  },
+  "request_prompt_hash": "3c637a48a56bddf41c964b3397601b316a90351286a9cd335034d33db914d29f",
+  "comparable": true
+}

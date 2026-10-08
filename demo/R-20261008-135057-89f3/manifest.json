@@ -1,0 +1,123 @@
+{
+  "run_id": "R-20261008-135057-89f3",
+  "parent_run_id": null,
+  "root_run_id": "R-20261008-135057-89f3",
+  "purpose": "analysis",
+  "analysis_type": "primary",
+  "sensitivity_fields": [],
+  "status": "completed",
+  "created_at": "2026-10-08T13:50:57Z",
+  "completed_at": "2026-10-08T13:51:10Z",
+  "spec": {
+    "compartments": 2,
+    "absorption": "first_order",
+    "route": "oral",
+    "error_model": "combined",
+    "iiv": [
+      "CL",
+      "V2",
+      "KA"
+    ],
+    "estimation": "FOCEi",
+    "reference_values": {
+      "CL": 4.2,
+      "V2": 35.0,
+      "V3": 120.0,
+      "Q": 8.1,
+      "KA": 1.1,
+      "IIV_CL": 30.0
+    },
+    "analysis_type": "primary",
+    "blq_method": "M1",
+    "template": "pk_2cmt_oral_v1"
+  },
+  "spec_hash": "5c35bee5bc26c533ecfbf89e2cc3a004ae8575e9508e07875adba84dacdf6d07",
+  "methodology_hash": "b654e16c214dc3976105d8ac0299bbdd62f10838806e6f9b8c4930f04667771a",
+  "template": {
+    "id": "pk_2cmt_oral_v1",
+    "version": "1.0.1",
+    "hash": "9b9b134ad8ffa5084d7e9cfbdc62d37555f3944a4969b5b470747564e3074249",
+    "catalogue_version": "1.0.1"
+  },
+  "script_hash": "e6a722880b7af872a1dcd704447b2f91edb87b195567544e51c27eb00cb20021",
+  "seed": 20240607,
+  "input_data": {
+    "raw_file": "data/raw/adpc_synthetic.csv",
+    "raw_hash": "1cb7adff311dcd25660f2353d892964c98ad1932a6b69b6ed28c6ebfcaa48c6b",
+    "prepared_hash": "643cf77a70d32f3e284a6391b2438c2c1ee0b95f85d8b6c246098e4ef7f82494"
+  },
+  "extractor": {
+    "name": "mock",
+    "model": "rule-based",
+    "prompt_version": "mock_v1",
+    "job_ids": [
+      "J-fa6e76a36c",
+      "J-4dd0494acd"
+    ]
+  },
+  "confirmation": {
+    "at": "2026-10-08T13:50:57Z",
+    "by": "auto-confirm",
+    "mode": "auto-confirm (demo)"
+  },
+  "packages": {
+    "python": {
+      "python": "3.12.3",
+      "jinja2": "3.1.4",
+      "pandas": "2.2.3",
+      "numpy": "2.1.3",
+      "jsonschema": "4.23.0",
+      "typer": "0.12.5"
+    },
+    "r": {
+      "nlmixr2": "7.0.1",
+      "nlmixr2est": "7.1.0",
+      "rxode2": "5.1.7.1",
+      "lotri": "1.0.5",
+      "ggplot2": "4.0.3",
+      "jsonlite": "2.0.0",
+      "R": "4.6.1",
+      "BLAS": "libblas.so.3",
+      "LAPACK": "libopenblasp-r0.3.26.so"
+    }
+  },
+  "environment": {
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "math_env": {},
+    "container_image": "ghcr.io/djindetoss/pk-analysis-poc:sha-12ee128",
+    "git_commit": "12ee1285923342eefe2a3df574e0bf6ad3ad84a0",
+    "python_executable": "/opt/venv/bin/python"
+  },
+  "tool_version": "0.1.0",
+  "settings": {
+    "tolerance": 0.2,
+    "rse_threshold": 50.0,
+    "qc": {
+      "ntime_abs_tol_h": 0.5,
+      "ntime_rel_tol": 0.1,
+      "blq_warn_fraction": 0.1
+    }
+  },
+  "engine": {
+    "returncode": 0,
+    "elapsed_s": 13.5,
+    "resumed_from_checkpoint": false
+  },
+  "outputs": {
+    "script.R": "e6a722880b7af872a1dcd704447b2f91edb87b195567544e51c27eb00cb20021",
+    "spec.json": "99c59b92bf9fc620e78e9f58a9ad14ff92dfb852750621d96233aa533b03f1c2",
+    "prepared_data.csv": "643cf77a70d32f3e284a6391b2438c2c1ee0b95f85d8b6c246098e4ef7f82494",
+    "qc_log.json": "d11e1d61607beb897323515cd5a19fa026886481edbf1a264dec6f599adf9c63",
+    "engine_results.json": "4de5c9c94d9d071381314fbbbeca00167feb2e2504c696409ab87b0ea52ac602",
+    "results.json": "85d32bbfd3de01fe7ffa016e56cfd0d3501bf766a5f6f05ac9db4c08ab3811d1",
+    "comparison.csv": "2f35fc1773bb046b4e54b0093e237c3398e6be15e1399f8345c7ac66af42df6c",
+    "individual_parameters.csv": "4ee2570edb8c4e4d671b576ecf06eaab940fb9055d2fe8e226a2bef1625a9f04",
+    "fit.rds": "c050c6337ca7bfbc65af6ce2b04ca45d3d708161d238549237b96120073f13a1",
+    "report.html": "2b69f6b6d586eb8c8e848c41f2340c65dbe8fdd3d788845b2cda5f645f3b0e55",
+    "engine.log": "091483e6ae43eab822beb620f25bb7da46d49ac074c94f92c9643ada2710df2f"
+  },
+  "request_prompt_hash": "3c85327d7417dfcc3e3852c5f74c8462505acdc9d7dbdb44cf9c4a2d2bfe283d",
+  "comparable": true
+}

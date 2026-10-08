@@ -120,7 +120,7 @@ jobs:
 
   # Optional: evaluate the real LLM extractor when the secret is configured.
   llm-eval:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     needs: build-test-demo
     runs-on: ubuntu-latest
     steps:

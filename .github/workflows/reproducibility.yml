@@ -1,8 +1,8 @@
 name: Reproducibility across machines
 
 # Runs the same stored spec (2-cmt, FOCEi, BLQ M3) in the same image on several GitHub-hosted runners,
-# which do not all have the same CPU. "pinned" is the default (generic libm code paths, see engine/runner.py);
-# "native" lets glibc's libm pick CPU-specific code paths (AVX2/AVX-512/FMA). The summary groups by CPU model.
+# which do not all have the same CPU. "pinned" is the image default (generic OpenBLAS kernels + generic libm,
+# see engine/runner.py); "blas-only" pins only OpenBLAS; "native" pins nothing. The summary groups by CPU model.
 
 on:
   workflow_dispatch:
@@ -32,7 +32,7 @@ jobs:
       fail-fast: false
       matrix:
         replica: ${{ fromJSON(needs.plan.outputs.replicas) }}
-        mode: [native, pinned]
+        mode: [native, blas-only, pinned]
     steps:
       - uses: actions/checkout@v4
       - name: Run the stored spec
@@ -40,8 +40,13 @@ jobs:
           MODE: ${{ matrix.mode }}
         run: |
           docker pull --quiet "$IMAGE"
-          # pinned = the image default; native = math libraries free to pick CPU-specific code paths
-          if [ "$MODE" = "native" ]; then MATH="-e GLIBC_TUNABLES="; else MATH=""; fi
+          # pinned = image default (generic BLAS kernels + generic libm); blas-only = only BLAS pinned;
+          # native = both libraries free to pick CPU-specific code
+          case "$MODE" in
+            native)    MATH="-e GLIBC_TUNABLES= -e OPENBLAS_CORETYPE= -e OPENBLAS_NUM_THREADS=" ;;
+            blas-only) MATH="-e GLIBC_TUNABLES=" ;;
+            *)         MATH="" ;;
+          esac
           RUN="docker run --rm --network none --user $(id -u):$(id -g) -e HOME=/tmp -v $PWD:/app -w /app -e PKPOC_RUNS_DIR=/app/out $MATH $IMAGE"
           $RUN Rscript --vanilla data/make_synthetic.R data/raw/adpc_synthetic.csv
           rid=$($RUN python -m orchestrator.cli run-spec experiments/spec_2cmt_m3.json --purpose experiment | tail -1)
@@ -80,7 +85,7 @@ jobs:
           recs = [json.load(open(f)) for f in sorted(glob.glob("results/*/result.json"))]
           print("## Same image, same script, same data – different machines\n")
           print(f"Script hashes: {sorted({r['script_hash'][:12] for r in recs})} · data hashes: {sorted({r['prepared_hash'][:12] for r in recs})}\n")
-          for mode in ("native", "pinned"):
+          for mode in ("native", "blas-only", "pinned"):
               rs = [r for r in recs if r["mode"] == mode]
               if not rs:
                   continue

@@ -33,12 +33,14 @@ class EngineOutcome:
         return self.returncode == 0 and self.results is not None
 
 
-# glibc's libm selects CPU-specific code paths (AVX2/AVX-512/FMA) at run time, so the same binary can
-# round differently on two machines and an ill-conditioned optimisation can stop at a different point.
-# Forcing the generic code paths made a FOCEi/M3 fit bit-for-bit identical on 8 GitHub runners with
-# 3 CPU models, versus 2 distinct results without it (.github/workflows/reproducibility.yml).
-# An explicitly set (even empty) GLIBC_TUNABLES is respected, which is how "native" mode is tested.
+# Floating-point results of an optimisation can depend on the machine, through two libraries that pick
+# CPU-specific code at run time: OpenBLAS (behind Ubuntu's libblas.so.3 symlink; kernels for Zen 3,
+# Zen 4, AVX-512...) and glibc's libm (AVX2/FMA variants of exp, log...). Each manifest records the
+# settings used; .github/workflows/reproducibility.yml measures their effect across GitHub runners.
+# An explicitly set (even empty) variable is respected, which is how the "native" mode is tested.
 PINNED_MATH_ENV = {
+    "OPENBLAS_CORETYPE": "Prescott",   # generic x86-64 kernels
+    "OPENBLAS_NUM_THREADS": "1",       # no thread-dependent summation order
     "GLIBC_TUNABLES": "glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4",
 }
 

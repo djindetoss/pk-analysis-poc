@@ -48,7 +48,7 @@
 {% if rejected %}
 <div class="scroll"><table>
   <tr><th>Time</th><th>Request (pseudonymised)</th><th>Outcome</th><th>Reasons</th></tr>
-  {% for e in rejected %}<tr><td class="note">{{ e.ts }}</td><td>{{ e.prompt }}</td><td class="fail">{{ e.label or e.event }}</td><td>{{ e.reasons | join("; ") }}</td></tr>{% endfor %}
+  {% for e in rejected %}<tr><td class="note">{{ e.ts }}</td><td>{{ e.prompt }}</td><td class="fail">{{ e.get("label") or e.event }}</td><td>{{ e.get("reasons", []) | join("; ") }}</td></tr>{% endfor %}
 </table></div>
 {% else %}<p>None.</p>{% endif %}
 
@@ -73,7 +73,7 @@
 <details><summary>{{ events | length }} events</summary>
 <div class="scroll"><table>
   <tr><th>Time</th><th>Event</th><th>Details</th></tr>
-  {% for e in events | reverse %}<tr><td class="note">{{ e.ts }}</td><td>{{ e.event }}</td><td><code>{{ e.run_id or e.job_id or "" }}</code> {{ e.status or e.label or "" }}</td></tr>{% endfor %}
+  {% for e in events | reverse %}<tr><td class="note">{{ e.ts }}</td><td>{{ e.event }}</td><td><code>{{ e.get("run_id") or e.get("job_id") or "" }}</code> {{ e.get("status") or e.get("label") or "" }}</td></tr>{% endfor %}
 </table></div>
 </details>
 </main></body></html>

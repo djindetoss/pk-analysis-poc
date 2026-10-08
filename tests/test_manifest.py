@@ -1,5 +1,4 @@
 import json
-import os
 
 import pandas as pd
 import pytest
@@ -63,7 +62,8 @@ def test_manifest_is_complete(spec, fake_engine):
 def test_run_files_are_frozen_and_ids_never_reused(spec, fake_engine):
     out = _execute(spec)
     d = runs.run_path(out.run_id)
-    assert not os.access(d / "manifest.json", os.W_OK)
+    # check the permission bits (os.access is always True for root, e.g. in the container)
+    assert all(not (f.stat().st_mode & 0o222) for f in d.iterdir() if f.is_file())
     with pytest.raises(FileExistsError):
         runs.create_run_dir(out.run_id)
 
@@ -76,3 +76,18 @@ def test_comparison_flags_without_concluding(spec, fake_engine):
     text = (runs.run_path(out.run_id) / "report.html").read_text().lower()
     for word in ("error by the applicant", "applicant made", "incorrect", "wrong"):
         assert word not in text
+
+
+def test_history_page_renders_with_runs_rejections_and_audit_events(spec, fake_engine):
+    from orchestrator.cli import make_answer, make_confirm
+    from reporting.report import build_history
+    from reporting.site import export
+
+    out = _execute(spec)
+    pipeline.submit("Add a time-varying covariate on CL", parent_id=out.run_id,
+                    confirm=make_confirm(True), answer=make_answer([]))
+    html = build_history().read_text()
+    assert out.run_id in html and "out of scope" in html
+    store = runs.run_path(out.run_id).parent
+    site = export(store, store.parent / "site")
+    assert not (site.parent / "audit" / "pseudonym_map.jsonl").exists()

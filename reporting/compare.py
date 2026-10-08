@@ -59,8 +59,9 @@ def compare(reference: dict[str, float] | None, results: dict[str, Any] | None, 
     labels = load_catalogue()["parameter_labels"]
     reference = reference or {}
     by_param = {e["parameter"]: e for e in (results or {}).get("estimates", [])}
+    order = list(labels) + [f"IIV_{p}" for p in labels]  # catalogue order, whatever the extractor's order
     rows = []
-    for key, applicant in reference.items():
+    for key, applicant in sorted(reference.items(), key=lambda kv: order.index(kv[0]) if kv[0] in order else 99):
         iiv = key.startswith("IIV_")
         p = key.removeprefix("IIV_")
         e = by_param.get(p, {})

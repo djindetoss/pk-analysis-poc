@@ -1,0 +1,103 @@
+{
+  "summary": {
+    "raw_records": 483,
+    "prepared_records": 473,
+    "subjects": 60,
+    "observations_used": 413,
+    "censored_observations": 0,
+    "excluded_records": 10,
+    "fixed_records": 4,
+    "warnings": 1,
+    "blq_fraction": 0.0167,
+    "blq_fraction_late": 0.0625,
+    "ntime_deviations": 9,
+    "blq_method": "M1"
+  },
+  "log": [
+    {
+      "check": "required_columns",
+      "status": "pass",
+      "n_records": 0,
+      "detail": "All 11 required columns present",
+      "subjects": []
+    },
+    {
+      "check": "units",
+      "status": "fix",
+      "n_records": 4,
+      "detail": "Converted DV and LLOQ from ug/mL to ng/mL",
+      "subjects": [
+        "SYN-052"
+      ]
+    },
+    {
+      "check": "duplicates",
+      "status": "pass",
+      "n_records": 0,
+      "detail": "No duplicate records",
+      "subjects": []
+    },
+    {
+      "check": "chronology",
+      "status": "pass",
+      "n_records": 0,
+      "detail": "Every subject has a dose record (60 subjects)",
+      "subjects": []
+    },
+    {
+      "check": "records_before_dose",
+      "status": "exclude",
+      "n_records": 3,
+      "detail": "Observation records before the first dose excluded (3 with a quantified concentration > 0, which is not expected before dosing)",
+      "subjects": [
+        "SYN-007",
+        "SYN-023",
+        "SYN-041"
+      ]
+    },
+    {
+      "check": "ntime_vs_time",
+      "status": "warn",
+      "n_records": 9,
+      "detail": "Actual time deviates from nominal by more than max(0.5 h, 10% of NTIME); records kept, actual TIME used",
+      "subjects": [
+        "SYN-005",
+        "SYN-007",
+        "SYN-012",
+        "SYN-014",
+        "SYN-019",
+        "SYN-025",
+        "SYN-035",
+        "SYN-046"
+      ]
+    },
+    {
+      "check": "missing_covariates",
+      "status": "pass",
+      "n_records": 0,
+      "detail": "WT available for all subjects",
+      "subjects": []
+    },
+    {
+      "check": "blq_proportion",
+      "status": "pass",
+      "n_records": 7,
+      "detail": "7 BLQ records = 1.7% of observations (6.2% of samples with NTIME >= 24 h)",
+      "subjects": []
+    },
+    {
+      "check": "blq_handling",
+      "status": "exclude",
+      "n_records": 7,
+      "detail": "BLQ method M1: BLQ records discarded before estimation",
+      "subjects": [
+        "SYN-002",
+        "SYN-011",
+        "SYN-020",
+        "SYN-030",
+        "SYN-039",
+        "SYN-042"
+      ]
+    }
+  ]
+}

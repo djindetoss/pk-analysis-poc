@@ -1,0 +1,255 @@
+{
+  "run1": "R-20261008-133331-88d7",
+  "run2": "R-20261008-133340-dbe8",
+  "out_of_scope": {
+    "status": "rejected",
+    "reasons": [
+      "out of scope \u2013 expert review",
+      "unsupported request: time-varying covariate on CL"
+    ]
+  },
+  "rerender": {
+    "run_id": "R-20261008-133331-88d7",
+    "stored_script_hash": "f4123a0e77a2b3bd59dd40bf39e2465bf71d2ed09ea9771160537259e2d766a6",
+    "rerendered_script_hash": "f4123a0e77a2b3bd59dd40bf39e2465bf71d2ed09ea9771160537259e2d766a6",
+    "identical": true,
+    "template_hash_unchanged": true
+  },
+  "replay": {
+    "original_run_id": "R-20261008-133331-88d7",
+    "replay_run_id": "R-20261008-133349-5e14",
+    "script_hash_identical": true,
+    "prepared_data_hash_identical": true,
+    "ofv_original": 4372.65392040296,
+    "ofv_replay": 4372.65392040296,
+    "max_relative_difference": 0.0,
+    "tolerance": 1e-06,
+    "estimates_identical_within_tolerance": true
+  },
+  "history_page": "/app/runs/index.html",
+  "extractor": "mock",
+  "Run 1 (primary, M1)": {
+    "ofv": 4372.65392040296,
+    "comparison": [
+      {
+        "parameter": "CL/F (L/h)",
+        "key": "CL",
+        "applicant": 4.2,
+        "independent": 4.09333584795449,
+        "ci_lower": 3.81398271517444,
+        "ci_upper": 4.39315005217136,
+        "rel_diff": -0.02539622667750234,
+        "flag": "",
+        "applicant_in_ci": true
+      },
+      {
+        "parameter": "V2/F (L)",
+        "key": "V2",
+        "applicant": 35.0,
+        "independent": 35.4243289092133,
+        "ci_lower": 31.4463849620495,
+        "ci_upper": 39.9054797612685,
+        "rel_diff": 0.012123683120380032,
+        "flag": "",
+        "applicant_in_ci": true
+      },
+      {
+        "parameter": "V3/F (L)",
+        "key": "V3",
+        "applicant": 120.0,
+        "independent": 117.300147760499,
+        "ci_lower": 110.270905169645,
+        "ci_upper": 124.777470933671,
+        "rel_diff": -0.02249876866250832,
+        "flag": "",
+        "applicant_in_ci": true
+      },
+      {
+        "parameter": "Q/F (L/h)",
+        "key": "Q",
+        "applicant": 8.1,
+        "independent": 7.95920655084577,
+        "ci_lower": 7.54250515461634,
+        "ci_upper": 8.39892948303175,
+        "rel_diff": -0.01738190730299133,
+        "flag": "",
+        "applicant_in_ci": true
+      },
+      {
+        "parameter": "KA (1/h)",
+        "key": "KA",
+        "applicant": 1.1,
+        "independent": 1.141895275672,
+        "ci_lower": 0.959543307799358,
+        "ci_upper": 1.35890147948869,
+        "rel_diff": 0.038086614247272645,
+        "flag": "",
+        "applicant_in_ci": true
+      },
+      {
+        "parameter": "IIV CL (CV%)",
+        "key": "IIV_CL",
+        "applicant": 30.0,
+        "independent": 26.7131539069386,
+        "ci_lower": null,
+        "ci_upper": null,
+        "rel_diff": -0.10956153643537997,
+        "flag": "",
+        "applicant_in_ci": null
+      }
+    ],
+    "checks": [
+      {
+        "check": "convergence",
+        "status": "pass",
+        "detail": "Optimizer message: Normal exit from bobyqa"
+      },
+      {
+        "check": "covariance step",
+        "status": "pass",
+        "detail": "Covariance matrix obtained (method |r|,|s| (full))"
+      },
+      {
+        "check": "RSE feasibility",
+        "status": "pass",
+        "detail": "All RSE below 50%"
+      },
+      {
+        "check": "parameter bounds",
+        "status": "pass",
+        "detail": "All estimates and variances within plausible bounds"
+      },
+      {
+        "check": "estimation diagnostics",
+        "status": "warn",
+        "detail": "nlmixr2 reported: gradient problems with covariance; see $scaleInfo; since sandwich matrix is corrected, you may compare to $covR or $covS if you wish; S matrix non-positive definite but corrected by S = sqrtm(S%*%S); R matrix non-positive definite but corrected by R = sqrtm(R%*%R); last objective function was not at minimum, possible problems in optimization; ETAs were reset to zero during optimization; (Can control by foceiControl(resetEtaP=.))"
+      }
+    ],
+    "qc": {
+      "raw_records": 483,
+      "prepared_records": 473,
+      "subjects": 60,
+      "observations_used": 413,
+      "censored_observations": 0,
+      "excluded_records": 10,
+      "fixed_records": 4,
+      "warnings": 1,
+      "blq_fraction": 0.0167,
+      "blq_fraction_late": 0.0625,
+      "ntime_deviations": 9,
+      "blq_method": "M1"
+    }
+  },
+  "Run 2 (M3)": {
+    "ofv": 4397.20467414865,
+    "comparison": [
+      {
+        "parameter": "CL/F (L/h)",
+        "key": "CL",
+        "applicant": 4.2,
+        "independent": 4.14371641838899,
+        "ci_lower": 3.85199062987992,
+        "ci_upper": 4.45753570188766,
+        "rel_diff": -0.01340085276452632,
+        "flag": "",
+        "applicant_in_ci": true
+      },
+      {
+        "parameter": "V2/F (L)",
+        "key": "V2",
+        "applicant": 35.0,
+        "independent": 35.2115620939613,
+        "ci_lower": 31.3110766225804,
+        "ci_upper": 39.5979390949066,
+        "rel_diff": 0.006044631256037089,
+        "flag": "",
+        "applicant_in_ci": true
+      },
+      {
+        "parameter": "V3/F (L)",
+        "key": "V3",
+        "applicant": 120.0,
+        "independent": 114.718311563708,
+        "ci_lower": 108.286396677884,
+        "ci_upper": 121.5322645482,
+        "rel_diff": -0.04401407030243334,
+        "flag": "",
+        "applicant_in_ci": true
+      },
+      {
+        "parameter": "Q/F (L/h)",
+        "key": "Q",
+        "applicant": 8.1,
+        "independent": 7.97724307110027,
+        "ci_lower": 7.56672996179573,
+        "ci_upper": 8.41002749360903,
+        "rel_diff": -0.015155176407374005,
+        "flag": "",
+        "applicant_in_ci": true
+      },
+      {
+        "parameter": "KA (1/h)",
+        "key": "KA",
+        "applicant": 1.1,
+        "independent": 1.13426865183677,
+        "ci_lower": 0.958827281162394,
+        "ci_upper": 1.34181139796094,
+        "rel_diff": 0.03115331985160896,
+        "flag": "",
+        "applicant_in_ci": true
+      },
+      {
+        "parameter": "IIV CL (CV%)",
+        "key": "IIV_CL",
+        "applicant": 30.0,
+        "independent": 27.39252481687,
+        "ci_lower": null,
+        "ci_upper": null,
+        "rel_diff": -0.08691583943766663,
+        "flag": "",
+        "applicant_in_ci": null
+      }
+    ],
+    "checks": [
+      {
+        "check": "convergence",
+        "status": "pass",
+        "detail": "Optimizer message: Normal exit from bobyqa"
+      },
+      {
+        "check": "covariance step",
+        "status": "pass",
+        "detail": "Covariance matrix obtained (method |r|,|s| (full))"
+      },
+      {
+        "check": "RSE feasibility",
+        "status": "pass",
+        "detail": "All RSE below 50%"
+      },
+      {
+        "check": "parameter bounds",
+        "status": "pass",
+        "detail": "All estimates and variances within plausible bounds"
+      },
+      {
+        "check": "estimation diagnostics",
+        "status": "warn",
+        "detail": "nlmixr2 reported: gradient problems with covariance; see $scaleInfo; since sandwich matrix is corrected, you may compare to $covR or $covS if you wish; S matrix non-positive definite but corrected by S = sqrtm(S%*%S); R matrix non-positive definite but corrected by R = sqrtm(R%*%R); last objective function was not at minimum, possible problems in optimization; ETAs were reset to zero during optimization; (Can control by foceiControl(resetEtaP=.))"
+      }
+    ],
+    "qc": {
+      "raw_records": 483,
+      "prepared_records": 480,
+      "subjects": 60,
+      "observations_used": 420,
+      "censored_observations": 7,
+      "excluded_records": 3,
+      "fixed_records": 11,
+      "warnings": 1,
+      "blq_fraction": 0.0167,
+      "blq_fraction_late": 0.0625,
+      "ntime_deviations": 9,
+      "blq_method": "M3"
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "estimation_method": "FOCEi",
+  "blq_method": "M3",
+  "ofv": 4397.80014615923,
+  "aic": 5189.70851405116,
+  "n_subjects": 60,
+  "n_observations": 420,
+  "n_censored": 7,
+  "optimizer_message": "Normal exit from bobyqa",
+  "optimizer_message_ok": true,
+  "covariance_method": "|r|,|s| (full)",
+  "covariance_ok": true,
+  "estimates": [
+    {
+      "parameter": "CL",
+      "estimate": 4.14412651784717,
+      "log_estimate": 1.42169203485967,
+      "se_log": 0.0374312598136018,
+      "rse_percent": 3.74312598136018,
+      "ci_lower": 3.85098174205283,
+      "ci_upper": 4.45958608642205,
+      "fixed": false,
+      "iiv_cv_percent": 27.5183114909908,
+      "shrinkage_percent": 5.14290339607444
+    },
+    {
+      "parameter": "V2",
+      "estimate": 35.2587345134214,
+      "log_estimate": 3.56271328617879,
+      "se_log": 0.0619952917135303,
+      "rse_percent": 6.19952917135303,
+      "ci_lower": 31.2245532108407,
+      "ci_upper": 39.8141280387102,
+      "fixed": false,
+      "iiv_cv_percent": 25.7016419182029,
+      "shrinkage_percent": 19.5481651424782
+    },
+    {
+      "parameter": "Q",
+      "estimate": 7.96407988500626,
+      "log_estimate": 2.07494141691586,
+      "se_log": 0.0277004735538455,
+      "rse_percent": 2.77004735538455,
+      "ci_lower": 7.54322256345191,
+      "ci_upper": 8.40841800453734,
+      "fixed": false,
+      "iiv_cv_percent": null,
+      "shrinkage_percent": null
+    },
+    {
+      "parameter": "V3",
+      "estimate": 114.678981500952,
+      "log_estimate": 4.74213675974929,
+      "se_log": 0.0296794302853487,
+      "rse_percent": 2.96794302853487,
+      "ci_lower": 108.198353089077,
+      "ci_upper": 121.547772425599,
+      "fixed": false,
+      "iiv_cv_percent": null,
+      "shrinkage_percent": null
+    },
+    {
+      "parameter": "KA",
+      "estimate": 1.13510115828674,
+      "log_estimate": 0.126721773205678,
+      "se_log": 0.0893239562822812,
+      "rse_percent": 8.93239562822812,
+      "ci_lower": 0.952800282864279,
+      "ci_upper": 1.35228196581825,
+      "fixed": false,
+      "iiv_cv_percent": 28.1462924218373,
+      "shrinkage_percent": 35.0380852191404
+    }
+  ],
+  "residual_error": {
+    "add.sd": {
+      "estimate": 9.93919341922289,
+      "se": 2.66928509875079,
+      "rse_percent": 26.8561540777369
+    },
+    "prop.sd": {
+      "estimate": 0.142927238073137,
+      "se": 0.00548003877381723,
+      "rse_percent": 3.83414585469919
+    }
+  },
+  "warnings": [],
+  "run_info": ["gradient problems with covariance; see $scaleInfo", "since sandwich matrix is corrected, you may compare to $covR or $covS if you wish", "S matrix non-positive definite but corrected by S = sqrtm(S%*%S)", "R matrix non-positive definite but corrected by R = sqrtm(R%*%R)", "ETAs were reset to zero during optimization; (Can control by foceiControl(resetEtaP=.))"],
+  "resumed_from_checkpoint": false,
+  "elapsed_seconds": 10.5183203220367,
+  "seed": 20240607,
+  "versions": {
+    "nlmixr2": "7.0.1",
+    "nlmixr2est": "7.1.0",
+    "rxode2": "5.1.7.1",
+    "lotri": "1.0.5",
+    "ggplot2": "4.0.3",
+    "jsonlite": "2.0.0",
+    "R": "4.6.1",
+    "BLAS": "libblas.so.3",
+    "LAPACK": "libopenblasp-r0.3.26.so"
+  },
+  "platform": "x86_64-pc-linux-gnu"
+}

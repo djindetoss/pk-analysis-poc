@@ -1,6 +1,6 @@
 {
-  "run1": "R-20261008-135057-89f3",
-  "run2": "R-20261008-135110-852b",
+  "run1": "R-20261008-135421-56a3",
+  "run2": "R-20261008-135437-12c2",
   "out_of_scope": {
     "status": "rejected",
     "reasons": [
@@ -9,19 +9,19 @@
     ]
   },
   "rerender": {
-    "run_id": "R-20261008-135057-89f3",
+    "run_id": "R-20261008-135421-56a3",
     "stored_script_hash": "e6a722880b7af872a1dcd704447b2f91edb87b195567544e51c27eb00cb20021",
     "rerendered_script_hash": "e6a722880b7af872a1dcd704447b2f91edb87b195567544e51c27eb00cb20021",
     "identical": true,
     "template_hash_unchanged": true
   },
   "replay": {
-    "original_run_id": "R-20261008-135057-89f3",
-    "replay_run_id": "R-20261008-135124-4eb2",
+    "original_run_id": "R-20261008-135421-56a3",
+    "replay_run_id": "R-20261008-135451-243b",
     "script_hash_identical": true,
     "prepared_data_hash_identical": true,
-    "ofv_original": 4372.65392040296,
-    "ofv_replay": 4372.65392040296,
+    "ofv_original": 4372.76020146527,
+    "ofv_replay": 4372.76020146527,
     "max_relative_difference": 0.0,
     "tolerance": 1e-06,
     "estimates_identical_within_tolerance": true,
@@ -30,25 +30,31 @@
       "CL.iiv_cv_percent": 0.0,
       "V2.estimate": 0.0
     },
-    "cpu_original": "INTEL(R) XEON(R) PLATINUM 8573C",
-    "cpu_replay": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "cpu_original": "AMD EPYC 7763 64-Core Processor",
+    "cpu_replay": "AMD EPYC 7763 64-Core Processor",
     "same_cpu": true,
-    "image_original": "ghcr.io/djindetoss/pk-analysis-poc:sha-12ee128",
-    "image_replay": "ghcr.io/djindetoss/pk-analysis-poc:sha-12ee128"
+    "math_env_original": {
+      "GLIBC_TUNABLES": "glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4"
+    },
+    "math_env_replay": {
+      "GLIBC_TUNABLES": "glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4"
+    },
+    "image_original": "ghcr.io/djindetoss/pk-analysis-poc:sha-783e715",
+    "image_replay": "ghcr.io/djindetoss/pk-analysis-poc:sha-783e715"
   },
   "history_page": "/app/runs/index.html",
   "extractor": "mock",
   "Run 1 (primary, M1)": {
-    "ofv": 4372.65392040296,
+    "ofv": 4372.76020146527,
     "comparison": [
       {
         "parameter": "CL/F (L/h)",
         "key": "CL",
         "applicant": 4.2,
-        "independent": 4.09333584795449,
-        "ci_lower": 3.81398271517444,
-        "ci_upper": 4.39315005217136,
-        "rel_diff": -0.02539622667750234,
+        "independent": 4.08999278179106,
+        "ci_lower": 3.809979788198,
+        "ci_upper": 4.39058522224203,
+        "rel_diff": -0.02619219481165243,
         "flag": "",
         "applicant_in_ci": true
       },
@@ -56,10 +62,10 @@
         "parameter": "V2/F (L)",
         "key": "V2",
         "applicant": 35.0,
-        "independent": 35.4243289092133,
-        "ci_lower": 31.4463849620495,
-        "ci_upper": 39.9054797612685,
-        "rel_diff": 0.012123683120380032,
+        "independent": 35.4959618207022,
+        "ci_lower": 31.4587132775859,
+        "ci_upper": 40.0513299593362,
+        "rel_diff": 0.014170337734348542,
         "flag": "",
         "applicant_in_ci": true
       },
@@ -67,10 +73,10 @@
         "parameter": "V3/F (L)",
         "key": "V3",
         "applicant": 120.0,
-        "independent": 117.300147760499,
-        "ci_lower": 110.270905169645,
-        "ci_upper": 124.777470933671,
-        "rel_diff": -0.02249876866250832,
+        "independent": 117.425374414626,
+        "ci_lower": 110.330998616397,
+        "ci_upper": 124.975924530115,
+        "rel_diff": -0.02145521321144995,
         "flag": "",
         "applicant_in_ci": true
       },
@@ -78,10 +84,10 @@
         "parameter": "Q/F (L/h)",
         "key": "Q",
         "applicant": 8.1,
-        "independent": 7.95920655084577,
-        "ci_lower": 7.54250515461634,
-        "ci_upper": 8.39892948303175,
-        "rel_diff": -0.01738190730299133,
+        "independent": 7.94942592142134,
+        "ci_lower": 7.52809363748342,
+        "ci_upper": 8.39433932722581,
+        "rel_diff": -0.018589392417118492,
         "flag": "",
         "applicant_in_ci": true
       },
@@ -89,10 +95,10 @@
         "parameter": "KA (1/h)",
         "key": "KA",
         "applicant": 1.1,
-        "independent": 1.141895275672,
-        "ci_lower": 0.959543307799358,
-        "ci_upper": 1.35890147948869,
-        "rel_diff": 0.038086614247272645,
+        "independent": 1.14188476218512,
+        "ci_lower": 0.959082236665164,
+        "ci_upper": 1.3595297256723,
+        "rel_diff": 0.038077056531927216,
         "flag": "",
         "applicant_in_ci": true
       },
@@ -100,10 +106,10 @@
         "parameter": "IIV CL (CV%)",
         "key": "IIV_CL",
         "applicant": 30.0,
-        "independent": 26.7131539069386,
+        "independent": 26.8488907105826,
         "ci_lower": null,
         "ci_upper": null,
-        "rel_diff": -0.10956153643537997,
+        "rel_diff": -0.10503697631391327,
         "flag": "",
         "applicant_in_ci": null
       }
@@ -151,16 +157,16 @@
     }
   },
   "Run 2 (M3)": {
-    "ofv": 4397.20467414865,
+    "ofv": 4397.80014615923,
     "comparison": [
       {
         "parameter": "CL/F (L/h)",
         "key": "CL",
         "applicant": 4.2,
-        "independent": 4.14371641838899,
-        "ci_lower": 3.85199062987992,
-        "ci_upper": 4.45753570188766,
-        "rel_diff": -0.01340085276452632,
+        "independent": 4.14412651784717,
+        "ci_lower": 3.85098174205283,
+        "ci_upper": 4.45958608642205,
+        "rel_diff": -0.01330321003638824,
         "flag": "",
         "applicant_in_ci": true
       },
@@ -168,10 +174,10 @@
         "parameter": "V2/F (L)",
         "key": "V2",
         "applicant": 35.0,
-        "independent": 35.2115620939613,
-        "ci_lower": 31.3110766225804,
-        "ci_upper": 39.5979390949066,
-        "rel_diff": 0.006044631256037089,
+        "independent": 35.2587345134214,
+        "ci_lower": 31.2245532108407,
+        "ci_upper": 39.8141280387102,
+        "rel_diff": 0.00739241466918291,
         "flag": "",
         "applicant_in_ci": true
       },
@@ -179,10 +185,10 @@
         "parameter": "V3/F (L)",
         "key": "V3",
         "applicant": 120.0,
-        "independent": 114.718311563708,
-        "ci_lower": 108.286396677884,
-        "ci_upper": 121.5322645482,
-        "rel_diff": -0.04401407030243334,
+        "independent": 114.678981500952,
+        "ci_lower": 108.198353089077,
+        "ci_upper": 121.547772425599,
+        "rel_diff": -0.044341820825399954,
         "flag": "",
         "applicant_in_ci": true
       },
@@ -190,10 +196,10 @@
         "parameter": "Q/F (L/h)",
         "key": "Q",
         "applicant": 8.1,
-        "independent": 7.97724307110027,
-        "ci_lower": 7.56672996179573,
-        "ci_upper": 8.41002749360903,
-        "rel_diff": -0.015155176407374005,
+        "independent": 7.96407988500626,
+        "ci_lower": 7.54322256345191,
+        "ci_upper": 8.40841800453734,
+        "rel_diff": -0.016780261110338205,
         "flag": "",
         "applicant_in_ci": true
       },
@@ -201,10 +207,10 @@
         "parameter": "KA (1/h)",
         "key": "KA",
         "applicant": 1.1,
-        "independent": 1.13426865183677,
-        "ci_lower": 0.958827281162394,
-        "ci_upper": 1.34181139796094,
-        "rel_diff": 0.03115331985160896,
+        "independent": 1.13510115828674,
+        "ci_lower": 0.952800282864279,
+        "ci_upper": 1.35228196581825,
+        "rel_diff": 0.03191014389703635,
         "flag": "",
         "applicant_in_ci": true
       },
@@ -212,10 +218,10 @@
         "parameter": "IIV CL (CV%)",
         "key": "IIV_CL",
         "applicant": 30.0,
-        "independent": 27.39252481687,
+        "independent": 27.5183114909908,
         "ci_lower": null,
         "ci_upper": null,
-        "rel_diff": -0.08691583943766663,
+        "rel_diff": -0.08272295030030664,
         "flag": "",
         "applicant_in_ci": null
       }
@@ -244,7 +250,7 @@
       {
         "check": "estimation diagnostics",
         "status": "warn",
-        "detail": "nlmixr2 reported: gradient problems with covariance; see $scaleInfo; since sandwich matrix is corrected, you may compare to $covR or $covS if you wish; S matrix non-positive definite but corrected by S = sqrtm(S%*%S); R matrix non-positive definite but corrected by R = sqrtm(R%*%R); last objective function was not at minimum, possible problems in optimization; ETAs were reset to zero during optimization; (Can control by foceiControl(resetEtaP=.))"
+        "detail": "nlmixr2 reported: gradient problems with covariance; see $scaleInfo; since sandwich matrix is corrected, you may compare to $covR or $covS if you wish; S matrix non-positive definite but corrected by S = sqrtm(S%*%S); R matrix non-positive definite but corrected by R = sqrtm(R%*%R); ETAs were reset to zero during optimization; (Can control by foceiControl(resetEtaP=.))"
       }
     ],
     "qc": {

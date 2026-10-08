@@ -1,0 +1,121 @@
+{
+  "run_id": "R-20261008-135451-243b",
+  "parent_run_id": "R-20261008-135421-56a3",
+  "root_run_id": "R-20261008-135421-56a3",
+  "purpose": "replay",
+  "analysis_type": "primary",
+  "sensitivity_fields": [],
+  "status": "completed",
+  "created_at": "2026-10-08T13:54:51Z",
+  "completed_at": "2026-10-08T13:55:07Z",
+  "spec": {
+    "compartments": 2,
+    "absorption": "first_order",
+    "route": "oral",
+    "error_model": "combined",
+    "iiv": [
+      "CL",
+      "V2",
+      "KA"
+    ],
+    "estimation": "FOCEi",
+    "reference_values": {
+      "CL": 4.2,
+      "V2": 35.0,
+      "V3": 120.0,
+      "Q": 8.1,
+      "KA": 1.1,
+      "IIV_CL": 30.0
+    },
+    "analysis_type": "primary",
+    "blq_method": "M1",
+    "template": "pk_2cmt_oral_v1"
+  },
+  "spec_hash": "5c35bee5bc26c533ecfbf89e2cc3a004ae8575e9508e07875adba84dacdf6d07",
+  "methodology_hash": "b654e16c214dc3976105d8ac0299bbdd62f10838806e6f9b8c4930f04667771a",
+  "template": {
+    "id": "pk_2cmt_oral_v1",
+    "version": "1.0.1",
+    "hash": "9b9b134ad8ffa5084d7e9cfbdc62d37555f3944a4969b5b470747564e3074249",
+    "catalogue_version": "1.0.1"
+  },
+  "script_hash": "e6a722880b7af872a1dcd704447b2f91edb87b195567544e51c27eb00cb20021",
+  "seed": 20240607,
+  "input_data": {
+    "raw_file": "data/raw/adpc_synthetic.csv",
+    "raw_hash": "1cb7adff311dcd25660f2353d892964c98ad1932a6b69b6ed28c6ebfcaa48c6b",
+    "prepared_hash": "643cf77a70d32f3e284a6391b2438c2c1ee0b95f85d8b6c246098e4ef7f82494"
+  },
+  "extractor": {
+    "name": null,
+    "model": null,
+    "prompt_version": null,
+    "job_ids": []
+  },
+  "confirmation": {
+    "at": "2026-10-08T13:54:51Z",
+    "by": "system",
+    "mode": "replay of a confirmed spec"
+  },
+  "packages": {
+    "python": {
+      "python": "3.12.3",
+      "jinja2": "3.1.4",
+      "pandas": "2.2.3",
+      "numpy": "2.1.3",
+      "jsonschema": "4.23.0",
+      "typer": "0.12.5"
+    },
+    "r": {
+      "nlmixr2": "7.0.1",
+      "nlmixr2est": "7.1.0",
+      "rxode2": "5.1.7.1",
+      "lotri": "1.0.5",
+      "ggplot2": "4.0.3",
+      "jsonlite": "2.0.0",
+      "R": "4.6.1",
+      "BLAS": "libblas.so.3",
+      "LAPACK": "libopenblasp-r0.3.26.so"
+    }
+  },
+  "environment": {
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "cpu": "AMD EPYC 7763 64-Core Processor",
+    "math_env": {
+      "GLIBC_TUNABLES": "glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4"
+    },
+    "container_image": "ghcr.io/djindetoss/pk-analysis-poc:sha-783e715",
+    "git_commit": "783e7156d14aaf7c22c3ea561804ccde9a5364e3",
+    "python_executable": "/opt/venv/bin/python"
+  },
+  "tool_version": "0.1.0",
+  "settings": {
+    "tolerance": 0.2,
+    "rse_threshold": 50.0,
+    "qc": {
+      "ntime_abs_tol_h": 0.5,
+      "ntime_rel_tol": 0.1,
+      "blq_warn_fraction": 0.1
+    }
+  },
+  "engine": {
+    "returncode": 0,
+    "elapsed_s": 16.0,
+    "resumed_from_checkpoint": false
+  },
+  "outputs": {
+    "script.R": "e6a722880b7af872a1dcd704447b2f91edb87b195567544e51c27eb00cb20021",
+    "spec.json": "99c59b92bf9fc620e78e9f58a9ad14ff92dfb852750621d96233aa533b03f1c2",
+    "prepared_data.csv": "643cf77a70d32f3e284a6391b2438c2c1ee0b95f85d8b6c246098e4ef7f82494",
+    "qc_log.json": "d11e1d61607beb897323515cd5a19fa026886481edbf1a264dec6f599adf9c63",
+    "engine_results.json": "4b3a8ce72acf3877dcb206b63559dff74315827a8f66be9969fbc25c5933c646",
+    "results.json": "2cfd933e75f7cc41f045b8e289c3d16bf341d111b61c4706f3fd2851fe86aa1f",
+    "comparison.csv": "11a0a8d34d468a960e9c3a5c6e12f53fbd62c92f05d93ea412c0a2143f57aa26",
+    "individual_parameters.csv": "218fc9de71ac1fcf0dfccc92f4a81e8224b83e1a45335b3799745508da279233",
+    "fit.rds": "ce724fdd0a5003c9648243095af7a99a273b3c49142aaef77e7ba46716016158",
+    "report.html": "8025fb0073c70db9a7fba59e18fb9fc16b0b72ce19676110347527a35d5b5df7",
+    "engine.log": "fe2775279914f9485c150e01b2ec92afcec2a44cb9e450f96c8662e1f360b541"
+  },
+  "comparable": true
+}

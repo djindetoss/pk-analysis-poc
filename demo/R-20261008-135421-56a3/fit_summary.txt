@@ -1,0 +1,91 @@
+── nlmixr² FOCEi (outer: bobyqa) ──
+
+         OBJF      AIC      BIC Log-likelihood Condition#(Cov) Condition#(Cor)
+FOCEi 4372.76 5151.803 5192.038      -2565.902        600802.4        14.92785
+
+── Time (sec fit$time): ──
+
+           setup optimize covariance preprocess postprocess table compress
+elapsed 3.410389 4.282104   4.443452      0.046       0.034 0.048    0.001
+            other
+elapsed 0.6050549
+
+── Population Parameters (fit$parFixed or fit$parFixedDf): ──
+
+                                  Parameter  Est.      SE  %RSE
+tcl                          log CL/F (L/h)  1.41  0.0362  2.57
+tvc                            log V2/F (L)  3.57  0.0616  1.73
+tq                            log Q/F (L/h)  2.07  0.0278  1.34
+tvp                            log V3/F (L)  4.77  0.0318 0.667
+tka                            log KA (1/h) 0.133  0.0890  67.1
+add.sd         Additive residual SD (ng/mL)  4.85    3.64  74.9
+prop.sd Proportional residual SD (fraction) 0.146 0.00514  3.53
+        Back-transformed(95%CI) BSV(CV%) Shrink(SD)%
+tcl           4.09 (3.81, 4.39)     26.8       5.20 
+tvc           35.5 (31.5, 40.1)     24.8       20.2 
+tq            7.95 (7.53, 8.39)                     
+tvp              117 (110, 125)                     
+tka          1.14 (0.959, 1.36)     29.9       34.8 
+add.sd       4.85 (-2.27, 12.0)                     
+prop.sd    0.146 (0.136, 0.156)                     
+ 
+  Covariance Type (fit$covMethod): |r|,|s| (full)
+    other calculated covs (setCov()): r; s; r,s; r (full); s (full)
+  Some strong fixed parameter correlations exist (fit$cor) :
+                cor:tvc,tcl              cor:tq,tcl             cor:tvp,tcl 
+                 0.112                   0.107                 0.00477  
+            cor:tka,tcl          cor:add.sd,tcl         cor:prop.sd,tcl 
+               -0.0186                  -0.143                   0.120  
+      cor:om.eta.cl,tcl       cor:om.eta.vc,tcl       cor:om.eta.ka,tcl 
+                -0.182                   0.281                 -0.0393  
+             cor:tq,tvc             cor:tvp,tvc             cor:tka,tvc 
+                -0.601                  0.0544                   0.737  
+         cor:add.sd,tvc         cor:prop.sd,tvc       cor:om.eta.cl,tvc 
+                -0.323                  -0.122                  0.0638  
+      cor:om.eta.vc,tvc       cor:om.eta.ka,tvc              cor:tvp,tq 
+               -0.0983                   0.372                  0.0796  
+             cor:tka,tq           cor:add.sd,tq          cor:prop.sd,tq 
+                -0.612                 -0.0104                   0.141  
+       cor:om.eta.cl,tq        cor:om.eta.vc,tq        cor:om.eta.ka,tq 
+                 0.126                   0.208                  -0.221  
+            cor:tka,tvp          cor:add.sd,tvp         cor:prop.sd,tvp 
+                -0.104                 -0.0507                  0.0656  
+      cor:om.eta.cl,tvp       cor:om.eta.vc,tvp       cor:om.eta.ka,tvp 
+                 0.137                  -0.305                   0.211  
+         cor:add.sd,tka         cor:prop.sd,tka       cor:om.eta.cl,tka 
+                -0.153                 -0.0609                 -0.0617  
+      cor:om.eta.vc,tka       cor:om.eta.ka,tka      cor:prop.sd,add.sd 
+                -0.241                   0.138                  -0.200  
+   cor:om.eta.cl,add.sd    cor:om.eta.vc,add.sd    cor:om.eta.ka,add.sd 
+                0.0225                  0.0472                  -0.311  
+  cor:om.eta.cl,prop.sd   cor:om.eta.vc,prop.sd   cor:om.eta.ka,prop.sd 
+                -0.226                  -0.131                  0.0122  
+cor:om.eta.vc,om.eta.cl cor:om.eta.ka,om.eta.cl cor:om.eta.ka,om.eta.vc 
+                0.0440                  0.0224                  0.0184  
+ 
+
+  No correlations in between subject variability (BSV) matrix
+  Full BSV covariance (fit$omega) or correlation (fit$omegaR; diagonals=SDs) 
+  Distribution stats (mean/skewness/kurtosis/p-value) available in fit$shrink 
+  Information about run found (fit$runInfo):
+   • gradient problems with covariance; see $scaleInfo 
+   • since sandwich matrix is corrected, you may compare to $covR or $covS if you wish 
+   • S matrix non-positive definite but corrected by S = sqrtm(S%*%S) 
+   • R matrix non-positive definite but corrected by R = sqrtm(R%*%R) 
+   • last objective function was not at minimum, possible problems in optimization 
+   • ETAs were reset to zero during optimization; (Can control by foceiControl(resetEtaP=.)) 
+  Censoring (fit$censInformation): No censoring
+  Minimization message (fit$message):  
+    Normal exit from bobyqa 
+
+── Fit Data (object fit is a modified tibble): ──
+# A tibble: 413 × 25
+  ID     TIME    DV  PRED   RES   WRES IPRED  IRES  IWRES CPRED  CRES  CWRES
+  <fct> <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>  <dbl>
+1 1     0.222  507.  607. -99.4 -0.434  682. -174. -1.75   603. -95.7 -0.371
+2 1     0.591 1585. 1240. 345.   0.841 1399.  186.  0.913 1234. 351.   0.756
+3 1     0.993 2057. 1577. 480.   1.06  1783.  275.  1.06  1571. 486.   0.946
+# ℹ 410 more rows
+# ℹ 13 more variables: eta.cl <dbl>, eta.vc <dbl>, eta.ka <dbl>, depot <dbl>,
+#   central <dbl>, peripheral1 <dbl>, cl <dbl>, vc <dbl>, q <dbl>, vp <dbl>,
+#   ka <dbl>, tad <dbl>, dosenum <dbl>

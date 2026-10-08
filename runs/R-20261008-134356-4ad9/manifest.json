@@ -1,0 +1,119 @@
+{
+  "run_id": "R-20261008-134356-4ad9",
+  "parent_run_id": "R-20261008-134033-5040",
+  "root_run_id": "R-20261008-134033-5040",
+  "purpose": "analysis",
+  "analysis_type": "sensitivity",
+  "sensitivity_fields": [
+    "blq_method"
+  ],
+  "status": "completed",
+  "created_at": "2026-10-08T13:43:56Z",
+  "completed_at": "2026-10-08T13:44:11Z",
+  "spec": {
+    "compartments": 2,
+    "absorption": "first_order",
+    "route": "oral",
+    "error_model": "combined",
+    "iiv": [
+      "CL",
+      "V2",
+      "KA"
+    ],
+    "estimation": "FOCEi",
+    "reference_values": {
+      "CL": 4.2,
+      "V2": 35.0,
+      "Q": 8.1,
+      "V3": 120.0,
+      "KA": 1.1,
+      "IIV_CL": 30.0
+    },
+    "analysis_type": "sensitivity",
+    "blq_method": "M3",
+    "template": "pk_2cmt_oral_v1"
+  },
+  "spec_hash": "0030756b6dc1154888296838e116220220efa71e79063db429abd47172f527db",
+  "methodology_hash": "15de490dc0bac871c1176633475cba04a3be6b1269daf85223fe38a62eed9bde",
+  "template": {
+    "id": "pk_2cmt_oral_v1",
+    "version": "1.0.0",
+    "hash": "20187e5bfc2287839003d53a964bb462a329804328371be6f7ff57134648472d",
+    "catalogue_version": "1.0.0"
+  },
+  "script_hash": "252de1359468ef60f5f72d8d3b31b56adc9fdd0f74337170078820355a9b87c8",
+  "seed": 20240607,
+  "input_data": {
+    "raw_file": "data/raw/adpc_synthetic.csv",
+    "raw_hash": "1cb7adff311dcd25660f2353d892964c98ad1932a6b69b6ed28c6ebfcaa48c6b",
+    "prepared_hash": "38d30404d452db3275fe44a8f1a96a4e78d3d35377ba67e53bfba0a645a67ff2"
+  },
+  "extractor": {
+    "name": "anthropic",
+    "model": "claude-opus-5-5",
+    "prompt_version": "system_v2",
+    "job_ids": [
+      "J-67ed97fd34"
+    ]
+  },
+  "confirmation": {
+    "at": "2026-10-08T13:43:56Z",
+    "by": "djindetoss (GitHub)",
+    "mode": "/confirm on issue #1"
+  },
+  "packages": {
+    "python": {
+      "python": "3.12.3",
+      "jinja2": "3.1.4",
+      "pandas": "2.2.3",
+      "numpy": "2.1.3",
+      "jsonschema": "4.23.0",
+      "typer": "0.12.5"
+    },
+    "r": {
+      "nlmixr2": "7.0.1",
+      "nlmixr2est": "7.1.0",
+      "rxode2": "5.1.7.1",
+      "lotri": "1.0.5",
+      "ggplot2": "4.0.3",
+      "jsonlite": "2.0.0",
+      "R": "4.6.1"
+    }
+  },
+  "environment": {
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "container_image": "ghcr.io/djindetoss/pk-analysis-poc@sha256:875e9b0a7d61d5099f5dbf131a04dba4c82eafe24e66a5a166d7e98245884596",
+    "git_commit": null,
+    "python_executable": "/opt/venv/bin/python"
+  },
+  "tool_version": "0.1.0",
+  "settings": {
+    "tolerance": 0.2,
+    "rse_threshold": 50.0,
+    "qc": {
+      "ntime_abs_tol_h": 0.5,
+      "ntime_rel_tol": 0.1,
+      "blq_warn_fraction": 0.1
+    }
+  },
+  "engine": {
+    "returncode": 0,
+    "elapsed_s": 14.6,
+    "resumed_from_checkpoint": false
+  },
+  "outputs": {
+    "script.R": "252de1359468ef60f5f72d8d3b31b56adc9fdd0f74337170078820355a9b87c8",
+    "spec.json": "4bfee2d8a9c847e2de617c6685b551139390aa3ed0b98cfeee9df7646455e38f",
+    "prepared_data.csv": "38d30404d452db3275fe44a8f1a96a4e78d3d35377ba67e53bfba0a645a67ff2",
+    "qc_log.json": "0e27caa5c03d9c6cf337ac6c806f776a517bbea3f329cb82ddfa56dc5e2ac00d",
+    "engine_results.json": "8e5cfe5148fc22c5d40a2461e3ea374d51e878d3d5470909748f83dc695642db",
+    "results.json": "25f05c618da7801671a8a4d1c288696a022e9ea7127258891b7241a81cbb4332",
+    "comparison.csv": "4d61f8a51c1716bd68d9690b8b6ec096e20e27a50ddccd8f06617ef171c5f776",
+    "individual_parameters.csv": "b53247b684d3b5ee1c54e40a6104841496dc2136942b3af195db188c9eb65612",
+    "fit.rds": "08663399169f4c6ef371b5768ddee63e811b92ff27e7bf308578d59809edfd5d",
+    "report.html": "eb4166615b14c18c6de2add892e25d58702ce192964feb2a2cab923eeb9f8b9e",
+    "engine.log": "3e8e0c6c93bfc4c93eecbfc77b7d7eb828595a814117584ac8077b8b71ae2399"
+  },
+  "comparable": true
+}

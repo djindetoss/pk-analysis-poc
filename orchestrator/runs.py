@@ -92,10 +92,30 @@ def git_commit() -> str | None:
         return None
 
 
+def cpu_model() -> str | None:
+    """CPU model: floating-point results of an optimisation can differ across CPU families."""
+    try:
+        for line in Path("/proc/cpuinfo").read_text().splitlines():
+            if line.startswith("model name"):
+                return line.split(":", 1)[1].strip()
+    except OSError:
+        pass
+    try:
+        return subprocess.run(["sysctl", "-n", "machdep.cpu.brand_string"], capture_output=True, text=True,
+                              timeout=5).stdout.strip() or None
+    except Exception:
+        return None
+
+
+MATH_ENV = ("OPENBLAS_CORETYPE", "GLIBC_TUNABLES", "OMP_NUM_THREADS")
+
+
 def environment() -> dict[str, Any]:
     return {
         "platform": platform.platform(),
         "machine": platform.machine(),
+        "cpu": cpu_model(),
+        "math_env": {k: os.environ.get(k) for k in MATH_ENV if os.environ.get(k)},
         "container_image": os.environ.get("PKPOC_IMAGE"),
         "git_commit": git_commit(),
         "python_executable": sys.executable,

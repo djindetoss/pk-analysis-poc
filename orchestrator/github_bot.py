@@ -249,11 +249,23 @@ def replay(issue: int, author: str) -> str:
     state["runs"].append(rp["replay_run_id"])
     save_state(state, "replayed", author)
     ok = rr["identical"] and rp["estimates_identical_within_tolerance"]
-    return (f"### {'✅' if ok else '❌'} Determinism check on `{rid}`\n\n"
+    largest = ", ".join(f"{k} {v:.1e}" for k, v in rp["largest_differences"].items())
+    if ok:
+        context = ""
+    elif rp["same_cpu"]:
+        context = (f"\n\nBoth runs used the same image and CPU model (`{rp['cpu_original']}`): this difference "
+                   f"is unexpected and should be investigated.")
+    else:
+        context = (f"\n\nSame image, script and data, but different CPU models: `{rp['cpu_original']}` (original) "
+                   f"vs `{rp['cpu_replay']}` (replay). Numerical libraries choose CPU-specific instructions, so "
+                   f"rounding differs slightly and an optimiser can stop at a slightly different point. "
+                   f"Bit-for-bit reproducibility requires the same CPU family, or pinned math libraries.")
+    return (f"### {'✅' if ok else '⚠️'} Determinism check on `{rid}`\n\n"
             f"- Script re-rendered from the stored spec: {'identical' if rr['identical'] else 'DIFFERENT'} hash "
             f"(`{rr['rerendered_script_hash'][:16]}`)\n"
             f"- Re-run `{rp['replay_run_id']}`: maximum relative difference {rp['max_relative_difference']:.2e} "
-            f"(tolerance {rp['tolerance']:g}); OFV {rp['ofv_original']:.6f} vs {rp['ofv_replay']:.6f}\n\n"
+            f"(tolerance {rp['tolerance']:g}); OFV {rp['ofv_original']:.6f} vs {rp['ofv_replay']:.6f}"
+            f"{f'; largest: {largest}' if not ok else ''}{context}\n\n"
             f"🌳 [Run history]({pages_url('runs/index.html')})")
 
 

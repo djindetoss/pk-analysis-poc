@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import getpass
 import json
+from pathlib import Path
 from typing import Optional
 
 import typer
@@ -87,6 +88,20 @@ def replay(run_id: str):
     """Re-execute a run from its stored spec and compare estimates."""
     typer.echo(json.dumps(pipeline.replay(run_id), indent=2))
     build_history()
+
+
+@app.command("run-spec")
+def run_spec(spec_file: Path, purpose: str = typer.Option("analysis", help="analysis | experiment")):
+    """Execute a stored, already confirmed spec (JSON) without the language model."""
+    from validator.validate import validate_spec
+
+    v = validate_spec(json.loads(spec_file.read_text()))
+    if not v.ok:
+        raise typer.BadParameter(f"spec is {v.status}: {v.reasons or v.missing}")
+    out = pipeline.execute(v.spec, parent_id=None, purpose=purpose, sensitivity_fields=[], extractor=None,
+                           job_ids=[], confirmation={"at": pipeline.now_iso(), "by": "system",
+                                                     "mode": f"stored spec {spec_file.name}"})
+    typer.echo(out.run_id)
 
 
 @app.command()

@@ -1,0 +1,101 @@
+name: Reproducibility across machines
+
+# Runs the same stored spec (2-cmt, FOCEi, BLQ M3) in the same image on several GitHub-hosted runners,
+# which do not all have the same CPU. "native" lets BLAS and glibc's libm pick CPU-specific code paths
+# (AVX2/AVX-512/FMA); "pinned" forces generic code paths. The summary groups results by CPU model.
+
+on:
+  workflow_dispatch:
+    inputs:
+      replicas:
+        description: Runners per mode
+        default: "8"
+
+env:
+  IMAGE: ghcr.io/djindetoss/pk-analysis-poc:latest
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      replicas: ${{ steps.r.outputs.list }}
+    steps:
+      - id: r
+        env:
+          N: ${{ inputs.replicas }}
+        run: echo "list=$(python3 -c "import json,os; print(json.dumps(list(range(1, int(os.environ['N']) + 1))))")" >> "$GITHUB_OUTPUT"
+
+  run:
+    needs: plan
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        replica: ${{ fromJSON(needs.plan.outputs.replicas) }}
+        mode: [native, pinned]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run the stored spec
+        env:
+          MODE: ${{ matrix.mode }}
+        run: |
+          docker pull --quiet "$IMAGE"
+          if [ "$MODE" = "pinned" ]; then
+            MATH="-e OPENBLAS_CORETYPE=Prescott -e GLIBC_TUNABLES=glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4"
+          else
+            MATH=""
+          fi
+          RUN="docker run --rm --network none --user $(id -u):$(id -g) -e HOME=/tmp -v $PWD:/app -w /app -e PKPOC_RUNS_DIR=/app/out $MATH $IMAGE"
+          $RUN Rscript --vanilla data/make_synthetic.R data/raw/adpc_synthetic.csv
+          rid=$($RUN python -m orchestrator.cli run-spec experiments/spec_2cmt_m3.json --purpose experiment | tail -1)
+          python3 - "$rid" <<'PY'
+          import json, os, sys
+          rid = sys.argv[1]
+          m = json.load(open(f"out/{rid}/manifest.json"))
+          e = json.load(open(f"out/{rid}/engine_results.json"))
+          rec = {"mode": os.environ["MODE"], "cpu": m["environment"]["cpu"], "blas": e["versions"].get("BLAS"),
+                 "ofv": e["ofv"], "optimizer": e["optimizer_message"], "elapsed_s": round(e["elapsed_seconds"], 1),
+                 "estimates": {x["parameter"]: x["estimate"] for x in e["estimates"]},
+                 "iiv": {x["parameter"]: x["iiv_cv_percent"] for x in e["estimates"] if x["iiv_cv_percent"]},
+                 "script_hash": m["script_hash"], "prepared_hash": m["input_data"]["prepared_hash"]}
+          json.dump(rec, open("result.json", "w"))
+          print(json.dumps(rec, indent=1))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: result-${{ matrix.mode }}-${{ matrix.replica }}
+          path: result.json
+
+  summary:
+    needs: run
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: results
+          pattern: result-*
+      - name: Summarise
+        run: |
+          python3 - <<'PY' | tee -a "$GITHUB_STEP_SUMMARY"
+          import glob, json
+          from collections import defaultdict
+          recs = [json.load(open(f)) for f in sorted(glob.glob("results/*/result.json"))]
+          print("## Same image, same script, same data – different machines\n")
+          print(f"Script hashes: {sorted({r['script_hash'][:12] for r in recs})} · data hashes: {sorted({r['prepared_hash'][:12] for r in recs})}\n")
+          for mode in ("native", "pinned"):
+              rs = [r for r in recs if r["mode"] == mode]
+              if not rs:
+                  continue
+              ofvs = sorted({round(r["ofv"], 9) for r in rs})
+              print(f"### {mode}: {len(rs)} runners, {len(ofvs)} distinct OFV value(s)\n")
+              print("| CPU | BLAS | runners | OFV | CL/F | V3/F | IIV CL % | s |\n|---|---|---:|---:|---:|---:|---:|---:|")
+              groups = defaultdict(list)
+              for r in rs:
+                  groups[(r["cpu"], r["blas"], round(r["ofv"], 6))].append(r)
+              for (cpu, blas, ofv), g in sorted(groups.items()):
+                  r = g[0]
+                  print(f"| {cpu} | {blas} | {len(g)} | {ofv:.6f} | {r['estimates']['CL']:.6f} | {r['estimates']['V3']:.4f} "
+                        f"| {r['iiv'].get('CL', 0):.4f} | {r['elapsed_s']} |")
+              print()
+          PY

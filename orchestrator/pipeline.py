@@ -319,6 +319,11 @@ def replay(run_id: str, rel_tol: float = 1e-6) -> dict[str, Any]:
         "ofv_original": a["ofv"], "ofv_replay": b["ofv"],
         "max_relative_difference": max_rel, "tolerance": rel_tol,
         "estimates_identical_within_tolerance": max_rel <= rel_tol,
+        "largest_differences": dict(sorted(diffs.items(), key=lambda kv: -kv[1])[:3]),
+        "cpu_original": m["environment"].get("cpu"), "cpu_replay": new["environment"].get("cpu"),
+        "same_cpu": m["environment"].get("cpu") == new["environment"].get("cpu"),
+        "image_original": m["environment"].get("container_image"),
+        "image_replay": new["environment"].get("container_image"),
     }
     audit("determinism_replay", **res)
     return res

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+{% include "_style.html.j2" %}
+<title>PK run {{ m.run_id }}</title>
+</head>
+<body><main>
+<p class="note"><a href="../index.html">← Run history</a></p>
+<h1>Independent population-PK analysis — run {{ m.run_id }}</h1>
+<p class="sub">
+  <span class="chip {{ m.analysis_type }}">{{ m.analysis_type }}{% if m.purpose == "replay" %} · replay{% endif %}</span>
+  template <code>{{ m.template.id }}</code> v{{ m.template.version }} ·
+  {% if m.parent_run_id %}child of <a href="../{{ m.parent_run_id }}/report.html">{{ m.parent_run_id }}</a> · {% endif %}
+  status <strong>{{ m.status }}</strong> · {{ m.completed_at }}
+</p>
+
+<div class="panel banner {% if m.analysis_type == 'sensitivity' %}sens{% endif %}{% if not r.comparable %} fail{% endif %}">
+  {% if not r.comparable %}
+    <strong>Not comparable.</strong> The estimation did not meet the convergence criterion; estimates are shown for information only and no comparison flags are raised.
+  {% elif m.analysis_type == "sensitivity" %}
+    <strong>Sensitivity analysis.</strong> This run departs from the applicant's declared methodology on:
+    {% for f in m.sensitivity_fields %}<code>{{ f }}</code>{{ ", " if not loop.last }}{% endfor %}.
+  {% else %}
+    <strong>Primary analysis</strong> reproducing the applicant's declared methodology.
+  {% endif %}
+  <br><span class="note">This report shows differences and generic possible sources of difference. It does not draw conclusions about the applicant's analysis; interpretation remains with the assessor.</span>
+</div>
+
+<h2>1. Pre-comparison checks</h2>
+<div class="scroll"><table>
+  <tr><th>Check</th><th>Status</th><th>Detail</th></tr>
+  {% for c in r.checks %}<tr><td>{{ c.check }}</td><td class="{{ c.status }}">{{ c.status }}</td><td>{{ c.detail }}</td></tr>{% endfor %}
+</table></div>
+
+<h2>2. Comparison with the applicant's reported values</h2>
+<p class="note">Relative difference = (independent − applicant) / applicant. Flag when |Δ| &gt; {{ (tolerance * 100) | round | int }}%.</p>
+{% if r.comparison %}
+<div class="scroll"><table>
+  <tr><th>Parameter</th><th class="num">Applicant</th><th class="num">Independent</th><th class="num">95% CI</th><th class="num">Δ</th><th>Applicant value in CI</th><th>Flag</th></tr>
+  {% for c in r.comparison %}
+  <tr class="{{ 'flag' if c.flag == 'DIFFERENCE > TOLERANCE' }}">
+    <td>{{ c.parameter }}</td><td class="num">{{ c.applicant | fmt }}</td><td class="num">{{ c.independent | fmt }}</td>
+    <td class="num">{% if c.ci_lower is not none %}{{ c.ci_lower | fmt }} – {{ c.ci_upper | fmt }}{% else %}–{% endif %}</td>
+    <td class="num">{{ c.rel_diff | pct }}</td><td>{{ c.applicant_in_ci | fmt }}</td><td class="{{ 'warn' if c.flag }}">{{ c.flag }}</td>
+  </tr>{% endfor %}
+</table></div>
+{% else %}<p>No applicant reference values were provided in the spec.</p>{% endif %}
+
+<h3>Possible sources of difference</h3>
+<div class="panel">
+  {% if r.sources_of_difference.flagged_parameters %}
+  <p>Differences above tolerance were observed for: <strong>{{ r.sources_of_difference.flagged_parameters | join(", ") }}</strong>.
+  Factors that commonly contribute to such differences are listed below for the assessor's consideration; the tool does not determine their cause.</p>
+  {% else %}<p>No parameter differs from the applicant's value by more than the tolerance. Generic factors are listed for completeness.</p>{% endif %}
+  <p><strong>Facts about this run</strong></p>
+  <ul>{% for f in r.sources_of_difference.facts %}<li>{{ f }}</li>{% endfor %}</ul>
+  <p><strong>Generic factors</strong></p>
+  <ul>{% for g in r.sources_of_difference.generic_factors %}<li><strong>{{ g.factor }}</strong> — {{ g.description }}</li>{% endfor %}</ul>
+</div>
+
+{% if r.engine %}
+<h2>3. Parameter estimates</h2>
+<div class="scroll"><table>
+  <tr><th>Parameter</th><th class="num">Estimate</th><th class="num">RSE %</th><th class="num">95% CI</th><th class="num">IIV CV%</th><th class="num">η-shrinkage SD%</th><th>Fixed</th></tr>
+  {% for e in r.engine.estimates %}
+  <tr><td>{{ labels[e.parameter] }}</td><td class="num">{{ e.estimate | fmt(4) }}</td><td class="num">{{ e.rse_percent | fmt(3) }}</td>
+      <td class="num">{% if e.ci_lower is not none %}{{ e.ci_lower | fmt }} – {{ e.ci_upper | fmt }}{% else %}–{% endif %}</td>
+      <td class="num">{{ e.iiv_cv_percent | fmt(3) }}</td><td class="num">{{ e.shrinkage_percent | fmt(3) }}</td><td>{{ e.fixed | fmt }}</td></tr>
+  {% endfor %}
+  {% for name, v in r.engine.residual_error.items() %}
+  <tr><td>Residual: {{ name }}</td><td class="num">{{ v.estimate | fmt(4) }}</td><td class="num">{{ v.rse_percent | fmt(3) }}</td><td class="num">–</td><td class="num">–</td><td class="num">–</td><td>no</td></tr>
+  {% endfor %}
+</table></div>
+<p class="note">RSE on the natural scale ≈ 100 × SE(log θ); 95% CI = exp(log θ ± 1.96 SE). OFV = {{ r.engine.ofv | fmt(8) }} ·
+  AIC = {{ r.engine.aic | fmt(8) }} · {{ r.engine.n_subjects }} subjects, {{ r.engine.n_observations }} observations ({{ r.engine.n_censored }} censored) ·
+  covariance {{ r.engine.covariance_method or "n/a" }} · estimation time {{ r.engine.elapsed_seconds | fmt(3) }} s{% if r.engine.resumed_from_checkpoint %} (resumed from checkpoint){% endif %}.</p>
+
+<h2>4. Goodness-of-fit</h2>
+<div class="grid">
+{% for title, src in plots %}{% if title != "Individual profiles" %}<figure><img src="{{ src }}" alt="{{ title }}"><figcaption class="note">{{ title }}</figcaption></figure>{% endif %}{% endfor %}
+</div>
+{% for title, src in plots %}{% if title == "Individual profiles" %}<figure class="wide"><img src="{{ src }}" alt="{{ title }}" style="max-width:100%"><figcaption class="note">{{ title }} (first six subjects)</figcaption></figure>{% endif %}{% endfor %}
+{% endif %}
+
+<h2>5. Data QC and preparation</h2>
+<p class="note">Every exclusion or correction is listed. Raw records: {{ r.qc.summary.raw_records }} → prepared: {{ r.qc.summary.prepared_records }}
+  ({{ r.qc.summary.observations_used }} observations, {{ r.qc.summary.subjects }} subjects).</p>
+<div class="scroll"><table>
+  <tr><th>Check</th><th>Outcome</th><th class="num">Records</th><th>Detail</th><th>Subjects</th></tr>
+  {% for e in r.qc.log %}<tr><td>{{ e.check }}</td><td class="{{ e.status }}">{{ e.status }}</td><td class="num">{{ e.n_records }}</td><td>{{ e.detail }}</td>
+    <td class="note">{{ e.subjects[:8] | join(", ") }}{% if e.subjects | length > 8 %} … (+{{ e.subjects | length - 8 }}){% endif %}</td></tr>{% endfor %}
+</table></div>
+
+<h2>6. Analysis spec (confirmed by the assessor)</h2>
+<p class="note">Confirmed {{ m.confirmation.at }} by {{ m.confirmation.by }} ({{ m.confirmation.mode }}).</p>
+<pre>{{ m.spec | tojson_pretty }}</pre>
+
+<h2>7. Traceability manifest</h2>
+<div class="scroll"><table>
+  <tr><td>Run ID / parent</td><td><code>{{ m.run_id }}</code> / <code>{{ m.parent_run_id or "—" }}</code> (root <code>{{ m.root_run_id }}</code>)</td></tr>
+  <tr><td>Template</td><td><code>{{ m.template.id }}</code> v{{ m.template.version }}, catalogue {{ m.template.catalogue_version }}, template hash <code>{{ m.template.hash[:16] }}…</code></td></tr>
+  <tr><td>Script SHA-256</td><td><code>{{ m.script_hash }}</code></td></tr>
+  <tr><td>Raw data SHA-256</td><td><code>{{ m.input_data.raw_hash }}</code></td></tr>
+  <tr><td>Prepared data SHA-256</td><td><code>{{ m.input_data.prepared_hash }}</code></td></tr>
+  <tr><td>Seed</td><td>{{ m.seed }}</td></tr>
+  <tr><td>Extractor</td><td>{{ m.extractor.name or "—" }} ({{ m.extractor.model or "—" }}, prompt {{ m.extractor.prompt_version or "—" }}) jobs {{ m.extractor.job_ids | join(", ") }}</td></tr>
+  <tr><td>R packages</td><td>{% if m.packages.r %}{% for k, v in m.packages.r.items() %}{{ k }} {{ v }}{{ ", " if not loop.last }}{% endfor %}{% endif %}</td></tr>
+  <tr><td>Python packages</td><td>{% for k, v in m.packages.python.items() %}{{ k }} {{ v }}{{ ", " if not loop.last }}{% endfor %}</td></tr>
+  <tr><td>Environment</td><td>{{ m.environment.platform }}{% if m.environment.container_image %} · image {{ m.environment.container_image }}{% endif %} · commit {{ (m.environment.git_commit or "n/a")[:12] }}</td></tr>
+</table></div>
+<details><summary>Full manifest.json</summary><pre>{{ m | tojson_pretty }}</pre></details>
+
+<p class="note">Generated {{ generated }} by pk-analysis-poc {{ tool_version }} — synthetic data, demonstrator only.</p>
+</main></body></html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+{% include "_style.html.j2" %}
+<title>PK analysis run history</title>
+</head>
+<body><main>
+<h1>AI-assisted population-PK analysis — run history</h1>
+<p class="sub">Demonstrator for IncreaseNET Task 7.7 · synthetic data only · generated {{ generated }} · tool {{ tool_version }}</p>
+
+<div class="panel banner">
+  The language model only turns the assessor's text into a structured spec; scripts come from versioned templates, data never reach the model,
+  every run is traceable through its manifest, and outputs flag differences without drawing conclusions.
+</div>
+
+<h2>Run tree</h2>
+{% if tree %}
+<div class="scroll"><table class="tree">
+  <tr><th>Run</th><th>Type</th><th>Spec (methodology)</th><th>Status</th><th class="num">OFV</th><th>Flags (|Δ| &gt; {{ (tolerance*100)|round|int }}%)</th><th>Script hash</th></tr>
+  {% for depth, e in tree %}
+  <tr>
+    <td>{{ "&nbsp;&nbsp;&nbsp;&nbsp;" | safe * depth }}{% if depth %}└─ {% endif %}<a href="{{ e.m.run_id }}/report.html">{{ e.m.run_id }}</a></td>
+    <td><span class="chip {{ e.m.analysis_type }}">{{ e.m.analysis_type }}</span>{% if e.m.purpose == "replay" %}<span class="chip replay">replay</span>{% endif %}</td>
+    <td class="note">{{ e.m.spec.compartments }}-cmt · {{ e.m.spec.error_model }} · IIV {{ e.m.spec.iiv | join("/") }} · {{ e.m.spec.estimation }} · BLQ {{ e.m.spec.blq_method }}</td>
+    <td class="{{ 'pass' if e.m.status == 'completed' else 'fail' }}">{{ e.m.status }}{% if e.r and not e.r.comparable %} (not comparable){% endif %}</td>
+    <td class="num">{{ (e.r.engine.ofv if e.r and e.r.engine else none) | fmt(8) }}</td>
+    <td>{{ (e.r.sources_of_difference.flagged_parameters if e.r else []) | join(", ") or "—" }}</td>
+    <td><code>{{ e.m.script_hash[:12] }}</code></td>
+  </tr>
+  {% endfor %}
+</table></div>
+{% else %}<p>No runs yet.</p>{% endif %}
+
+<h2>Side-by-side comparison</h2>
+{% if entries %}
+<div class="scroll"><table>
+  <tr><th>Parameter</th><th class="num">Applicant</th>{% for e in entries %}<th class="num"><a href="{{ e.m.run_id }}/report.html">{{ e.m.run_id[-11:] }}</a><br><span class="chip {{ e.m.analysis_type }}">{{ e.m.analysis_type }}{% if e.m.purpose == "replay" %} · replay{% endif %}</span><br><span class="note">BLQ {{ e.m.spec.blq_method }}</span></th>{% endfor %}</tr>
+  {% for row in table %}
+  <tr><td>{{ row.label }}</td><td class="num">{{ row.applicant | fmt }}</td>
+    {% for c in row.cells %}<td class="num {{ 'warn' if c and c.flag == 'DIFFERENCE > TOLERANCE' }}">{% if c %}{{ c.independent | fmt }}<br><span class="note">{{ c.rel_diff | pct }}</span>{% else %}–{% endif %}</td>{% endfor %}
+  </tr>{% endfor %}
+  {% for row in extra_rows %}<tr><td>{{ row.label }}</td><td></td>{% for v in row.cells %}<td class="num">{{ v | fmt(8) }}</td>{% endfor %}</tr>{% endfor %}
+</table></div>
+<p class="note">Cells show the independent estimate and its relative difference to the applicant's value; highlighted values exceed the tolerance.</p>
+{% endif %}
+
+<h2>Requests rejected or not executed</h2>
+{% if rejected %}
+<div class="scroll"><table>
+  <tr><th>Time</th><th>Request (pseudonymised)</th><th>Outcome</th><th>Reasons</th></tr>
+  {% for e in rejected %}<tr><td class="note">{{ e.ts }}</td><td>{{ e.prompt }}</td><td class="fail">{{ e.label or e.event }}</td><td>{{ e.reasons | join("; ") }}</td></tr>{% endfor %}
+</table></div>
+{% else %}<p>None.</p>{% endif %}
+
+<h2>Determinism checks</h2>
+{% if determinism %}
+<div class="scroll"><table>
+  <tr><th>Time</th><th>Check</th><th>Result</th></tr>
+  {% for e in determinism %}
+  <tr><td class="note">{{ e.ts }}</td>
+  {% if e.event == "determinism_rerender" %}
+    <td>Re-render script of {{ e.run_id }} from stored spec</td>
+    <td class="{{ 'pass' if e.identical else 'fail' }}">{{ "identical script hash" if e.identical else "HASH MISMATCH" }} <code>{{ e.rerendered_script_hash[:16] }}</code></td>
+  {% else %}
+    <td>Re-run {{ e.original_run_id }} → {{ e.replay_run_id }}</td>
+    <td class="{{ 'pass' if e.estimates_identical_within_tolerance else 'fail' }}">max relative difference {{ e.max_relative_difference | fmt(3) }} (tolerance {{ e.tolerance | fmt }}), OFV {{ e.ofv_original | fmt(10) }} vs {{ e.ofv_replay | fmt(10) }}</td>
+  {% endif %}</tr>
+  {% endfor %}
+</table></div>
+{% else %}<p>None yet.</p>{% endif %}
+
+<h2>Audit log (latest events)</h2>
+<details><summary>{{ events | length }} events</summary>
+<div class="scroll"><table>
+  <tr><th>Time</th><th>Event</th><th>Details</th></tr>
+  {% for e in events | reverse %}<tr><td class="note">{{ e.ts }}</td><td>{{ e.event }}</td><td><code>{{ e.run_id or e.job_id or "" }}</code> {{ e.status or e.label or "" }}</td></tr>{% endfor %}
+</table></div>
+</details>
+</main></body></html>

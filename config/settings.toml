@@ -1,0 +1,48 @@
+# Central configuration of the demonstrator. Every value used by a run is
+# copied into that run's manifest, so changing this file never alters the
+# interpretation of past runs.
+
+[analysis]
+seed = 20240607             # fixed seed passed to the PK engine
+tolerance = 0.20            # |relative difference| above which a parameter is flagged
+rse_threshold = 50.0        # %RSE above which an estimate is reported as imprecise
+iiv_cv_max = 150.0          # IIV CV% above which a variance is reported as implausible
+target_conc_unit = "ng/mL"
+raw_data = "data/raw/adpc_synthetic.csv"
+
+[qc]
+ntime_abs_tol_h = 0.5       # TIME vs NTIME deviation flagged if > max(abs, rel * NTIME)
+ntime_rel_tol = 0.10
+blq_warn_fraction = 0.10    # BLQ fraction above which a warning is raised
+
+[qc.unit_factors]           # multiply by factor to obtain ng/mL
+"ng/mL" = 1.0
+"ug/mL" = 1000.0
+"µg/mL" = 1000.0
+"mg/L" = 1000.0
+"ng/L" = 0.001
+
+[engine]
+rscript = "Rscript"
+timeout_s = 7200
+
+[llm]
+anthropic_model = "claude-sonnet-5-5"
+prompt_version = "system_v1"
+max_retries = 2
+
+# Identifiers that must never leave the machine. All names below are fictitious.
+[pseudonymisation]
+identifiers = ["Fictivumab", "Placebozole", "Demonstrafen"]
+
+[[pseudonymisation.patterns]]
+regex = '\bXYZ-\d+\b'
+token = "PRODUCT"
+
+[[pseudonymisation.patterns]]
+regex = '\bEMEA/H/C/\d{4,6}\b'
+token = "PROCEDURE"
+
+[[pseudonymisation.patterns]]
+regex = '\b[A-Z]{2,5}-\d{3,6}-\d{2,4}\b'
+token = "STUDY"

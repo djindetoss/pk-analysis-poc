@@ -1,56 +1,15 @@
 {
   "issue": 1,
   "title": "Analysis request: Reproduce the applicant's model for XYZ-123 (end-to-end test)",
-  "status": "awaiting_confirmation",
-  "proposal": {
-    "status": "ready",
-    "prompt_hash": "3c637a48a56bddf41c964b3397601b316a90351286a9cd335034d33db914d29f",
-    "spec": {
-      "compartments": 2,
-      "absorption": "first_order",
-      "route": "oral",
-      "error_model": "combined",
-      "iiv": [
-        "CL",
-        "V2",
-        "KA"
-      ],
-      "estimation": "FOCEi",
-      "reference_values": {
-        "CL": 4.2,
-        "V2": 35.0,
-        "Q": 8.1,
-        "V3": 120.0,
-        "KA": 1.1,
-        "IIV_CL": 30.0
-      },
-      "analysis_type": "sensitivity",
-      "blq_method": "M3",
-      "template": "pk_2cmt_oral_v1"
-    },
-    "parent_id": "R-20261008-134356-4ad9",
-    "missing": [],
-    "questions": [],
-    "reasons": [],
-    "sensitivity": [
-      "blq_method"
-    ],
-    "job_ids": [
-      "J-71710b716b"
-    ],
-    "extractor": {
-      "name": "anthropic",
-      "model": "claude-opus-5-5",
-      "prompt_version": "system_v2"
-    },
-    "clarification_rounds": 0
-  },
+  "status": "completed",
+  "proposal": null,
   "runs": [
     "R-20261008-134033-5040",
     "R-20261008-134356-4ad9",
-    "R-20261008-134626-7037"
+    "R-20261008-134626-7037",
+    "R-20261008-141300-3341"
   ],
-  "last_run_id": "R-20261008-134356-4ad9",
+  "last_run_id": "R-20261008-141300-3341",
   "events": [
     {
       "ts": "2026-10-08T13:39:12Z",
@@ -106,8 +65,18 @@
       "ts": "2026-10-08T14:11:53Z",
       "event": "refine_requested",
       "by": "djindetoss"
+    },
+    {
+      "ts": "2026-10-08T14:12:59Z",
+      "event": "confirmed",
+      "by": "djindetoss"
+    },
+    {
+      "ts": "2026-10-08T14:13:14Z",
+      "event": "run_completed",
+      "by": "djindetoss"
     }
   ],
   "created_at": "2026-10-08T13:39:07Z",
-  "updated_at": "2026-10-08T14:11:53Z"
+  "updated_at": "2026-10-08T14:13:14Z"
 }

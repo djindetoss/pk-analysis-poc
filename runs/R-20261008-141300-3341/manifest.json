@@ -1,0 +1,127 @@
+{
+  "run_id": "R-20261008-141300-3341",
+  "parent_run_id": "R-20261008-134356-4ad9",
+  "root_run_id": "R-20261008-134033-5040",
+  "purpose": "analysis",
+  "analysis_type": "sensitivity",
+  "sensitivity_fields": [
+    "blq_method"
+  ],
+  "status": "completed",
+  "created_at": "2026-10-08T14:13:00Z",
+  "completed_at": "2026-10-08T14:13:14Z",
+  "spec": {
+    "compartments": 2,
+    "absorption": "first_order",
+    "route": "oral",
+    "error_model": "combined",
+    "iiv": [
+      "CL",
+      "V2",
+      "KA"
+    ],
+    "estimation": "FOCEi",
+    "reference_values": {
+      "CL": 4.2,
+      "V2": 35.0,
+      "Q": 8.1,
+      "V3": 120.0,
+      "KA": 1.1,
+      "IIV_CL": 30.0
+    },
+    "analysis_type": "sensitivity",
+    "blq_method": "M3",
+    "template": "pk_2cmt_oral_v1"
+  },
+  "spec_hash": "0030756b6dc1154888296838e116220220efa71e79063db429abd47172f527db",
+  "methodology_hash": "15de490dc0bac871c1176633475cba04a3be6b1269daf85223fe38a62eed9bde",
+  "template": {
+    "id": "pk_2cmt_oral_v1",
+    "version": "1.0.3",
+    "hash": "589f254e36326ab2ae18dce251949169b318f7e59c79210d33428f972dc38600",
+    "catalogue_version": "1.0.3"
+  },
+  "script_hash": "fdffd00a137b56c3daa89e23c5ac8b89b3918ed8e8ca2f41756e74f8b8f8b03b",
+  "seed": 20240607,
+  "input_data": {
+    "raw_file": "data/raw/adpc_synthetic.csv",
+    "raw_hash": "1cb7adff311dcd25660f2353d892964c98ad1932a6b69b6ed28c6ebfcaa48c6b",
+    "prepared_hash": "38d30404d452db3275fe44a8f1a96a4e78d3d35377ba67e53bfba0a645a67ff2"
+  },
+  "extractor": {
+    "name": "anthropic",
+    "model": "claude-opus-5-5",
+    "prompt_version": "system_v2",
+    "job_ids": [
+      "J-71710b716b"
+    ]
+  },
+  "confirmation": {
+    "at": "2026-10-08T14:13:00Z",
+    "by": "djindetoss (GitHub)",
+    "mode": "/confirm on issue #1"
+  },
+  "packages": {
+    "python": {
+      "python": "3.12.3",
+      "jinja2": "3.1.4",
+      "pandas": "2.2.3",
+      "numpy": "2.1.3",
+      "jsonschema": "4.23.0",
+      "typer": "0.12.5"
+    },
+    "r": {
+      "nlmixr2": "7.0.1",
+      "nlmixr2est": "7.1.0",
+      "rxode2": "5.1.7.1",
+      "lotri": "1.0.5",
+      "ggplot2": "4.0.3",
+      "jsonlite": "2.0.0",
+      "R": "4.6.1",
+      "BLAS": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3",
+      "LAPACK": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so"
+    }
+  },
+  "environment": {
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "cpu": "Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz",
+    "math_env": {
+      "OPENBLAS_CORETYPE": "Prescott",
+      "OPENBLAS_NUM_THREADS": "1",
+      "GLIBC_TUNABLES": "glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4"
+    },
+    "container_image": "ghcr.io/djindetoss/pk-analysis-poc@sha256:dd39ca7673a48f1e3f7b6df134be2b4f4ae00ef4e0a726894a72cbdbdf295b4b",
+    "git_commit": null,
+    "python_executable": "/opt/venv/bin/python"
+  },
+  "tool_version": "0.1.0",
+  "settings": {
+    "tolerance": 0.2,
+    "rse_threshold": 50.0,
+    "qc": {
+      "ntime_abs_tol_h": 0.5,
+      "ntime_rel_tol": 0.1,
+      "blq_warn_fraction": 0.1
+    }
+  },
+  "engine": {
+    "returncode": 0,
+    "elapsed_s": 14.2,
+    "resumed_from_checkpoint": false
+  },
+  "outputs": {
+    "script.R": "fdffd00a137b56c3daa89e23c5ac8b89b3918ed8e8ca2f41756e74f8b8f8b03b",
+    "spec.json": "4bfee2d8a9c847e2de617c6685b551139390aa3ed0b98cfeee9df7646455e38f",
+    "prepared_data.csv": "38d30404d452db3275fe44a8f1a96a4e78d3d35377ba67e53bfba0a645a67ff2",
+    "qc_log.json": "0e27caa5c03d9c6cf337ac6c806f776a517bbea3f329cb82ddfa56dc5e2ac00d",
+    "engine_results.json": "f3058f76fb677d928b3030e4585b91f5af9caa21ae435d61b2b0299030a1c9e0",
+    "results.json": "b9698e21cf86e048c6a0432f57994945ad3d218386cbbd034415d8391ab0d778",
+    "comparison.csv": "8b7f3325a85a4e097a18717ef2a172bea6888af664be34cf09d0e9ce3dc060b5",
+    "individual_parameters.csv": "074dedefc5f0279eaa8fccbe227e6bd5f3b72a4c82a86a1646003336ce1b2009",
+    "fit.rds": "9064f4f0fe2c3f7350a07569417a69bfb28a5a5a461ef292085a710c1d08da12",
+    "report.html": "041d4ef11a723c4bea6fa364e6ef3d0a715f0fc5d0c62c3a411c97024c198826",
+    "engine.log": "5850cc627b41781e0278d5cdf733feb260a633c227e7e52c4fc678b2610ec78e"
+  },
+  "comparable": true
+}

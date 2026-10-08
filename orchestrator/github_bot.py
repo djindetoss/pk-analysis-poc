@@ -261,9 +261,9 @@ def replay(issue: int, author: str) -> str:
                    f"is unexpected and should be investigated.")
     else:
         context = (f"\n\nSame image, script and data, but different CPU models: `{rp['cpu_original']}` (original) "
-                   f"vs `{rp['cpu_replay']}` (replay). Numerical libraries choose CPU-specific instructions, so "
-                   f"rounding differs slightly and an optimiser can stop at a slightly different point. "
-                   f"Bit-for-bit reproducibility requires the same CPU family, or pinned math libraries.")
+                   f"vs `{rp['cpu_replay']}` (replay). OpenBLAS and libm choose CPU-specific code, so rounding "
+                   f"differs slightly and an optimiser can stop at a slightly different point. The engine pins "
+                   f"generic code paths to avoid this; check `math_env` in both manifests.")
     return (f"### {'✅' if ok else '⚠️'} Determinism check on `{rid}`\n\n"
             f"- Script re-rendered from the stored spec: {'identical' if rr['identical'] else 'DIFFERENT'} hash "
             f"(`{rr['rerendered_script_hash'][:16]}`)\n"

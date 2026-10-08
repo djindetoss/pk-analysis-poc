@@ -1,0 +1,143 @@
+name: Assessor bot
+
+# One analysis request = one issue labelled `analysis-request` (opened from the portal or the issue form).
+# Each new issue or comment runs one step of the conversation: interpretation (needs the network for
+# the language model), then, after /confirm, the analysis itself in the pinned image with --network none.
+
+on:
+  issues:
+    types: [opened]
+  issue_comment:
+    types: [created]
+
+# Runs and requests are committed to the run-store branch: one step at a time, never cancelled.
+concurrency:
+  group: run-store
+  cancel-in-progress: false
+
+env:
+  IMAGE: ghcr.io/djindetoss/pk-analysis-poc:latest
+
+jobs:
+  handle:
+    if: >-
+      contains(github.event.issue.labels.*.name, 'analysis-request') &&
+      !github.event.issue.pull_request &&
+      (github.event_name == 'issues' || github.event.comment.user.type != 'Bot')
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+      issues: write
+    outputs:
+      published: ${{ steps.site.outputs.published }}
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ISSUE: ${{ github.event.issue.number }}
+      EVENT: ${{ github.event_name == 'issues' && 'opened' || 'comment' }}
+      AUTHOR: ${{ github.event_name == 'issues' && github.event.issue.user.login || github.event.comment.user.login }}
+      ASSOCIATION: ${{ github.event_name == 'issues' && github.event.issue.author_association || github.event.comment.author_association }}
+    steps:
+      - name: Authorise (collaborators only)
+        id: auth
+        run: |
+          case "$ASSOCIATION" in
+            OWNER|MEMBER|COLLABORATOR) echo "ok=true" >> "$GITHUB_OUTPUT" ;;
+            *) echo "ok=false" >> "$GITHUB_OUTPUT"; echo "::notice::$AUTHOR ($ASSOCIATION) is not a collaborator" ;;
+          esac
+
+      - name: Explain to non-collaborators
+        if: steps.auth.outputs.ok != 'true' && github.event_name == 'issues'
+        run: |
+          gh issue comment "$ISSUE" -R "$GITHUB_REPOSITORY" --body "Thanks for your interest! Analyses can only be run by collaborators of this repository (they use a paid language-model API and compute time). You can browse the existing runs on the [portal](https://djindetoss.github.io/pk-analysis-poc/), or run the demo yourself with \`docker run --rm ghcr.io/djindetoss/pk-analysis-poc:latest\`."
+
+      - uses: actions/checkout@v4
+        if: steps.auth.outputs.ok == 'true'
+
+      - name: Acknowledge
+        if: steps.auth.outputs.ok == 'true'
+        env:
+          COMMENT_ID: ${{ github.event.comment.id }}
+        run: |
+          if [ "$EVENT" = "comment" ]; then
+            gh api "repos/$GITHUB_REPOSITORY/issues/comments/$COMMENT_ID/reactions" -f content=eyes >/dev/null
+          else
+            gh api "repos/$GITHUB_REPOSITORY/issues/$ISSUE/reactions" -f content=eyes >/dev/null
+          fi
+
+      - name: Prepare run store, image and synthetic data
+        if: steps.auth.outputs.ok == 'true'
+        env:
+          BODY: ${{ github.event_name == 'issues' && github.event.issue.body || github.event.comment.body }}
+        run: |
+          printf '%s' "$BODY" > event_body.txt      # never interpolated into a shell command
+          scripts/run_store.sh checkout store
+          docker pull --quiet "$IMAGE"
+          echo "DIGEST=$(docker inspect --format '{{index .RepoDigests 0}}' "$IMAGE")" >> "$GITHUB_ENV"
+          echo "DOCKER_RUN=docker run --rm --user $(id -u):$(id -g) -e HOME=/tmp -v $PWD:/app -w /app -e PKPOC_RUNS_DIR=/app/store/runs" >> "$GITHUB_ENV"
+
+      - name: Generate synthetic data (no network)
+        if: steps.auth.outputs.ok == 'true'
+        run: $DOCKER_RUN --network none "$IMAGE" Rscript --vanilla data/make_synthetic.R data/raw/adpc_synthetic.csv
+
+      - name: Interpret the request or command (language model, network on)
+        id: handle
+        if: steps.auth.outputs.ok == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TITLE: ${{ github.event.issue.title }}
+        run: |
+          $DOCKER_RUN -e ANTHROPIC_API_KEY -e PKPOC_IMAGE="$DIGEST" "$IMAGE" \
+            python -m orchestrator.github_bot handle --issue "$ISSUE" --event "$EVENT" --author "$AUTHOR" \
+            --title "$TITLE" --body-file event_body.txt --out comment.md --action-file action.txt
+          echo "action=$(cat action.txt)" >> "$GITHUB_OUTPUT"
+
+      - name: Run the analysis (network disabled)
+        if: steps.handle.outputs.action == 'execute' || steps.handle.outputs.action == 'replay'
+        env:
+          ACTION: ${{ steps.handle.outputs.action }}
+        run: |
+          $DOCKER_RUN --network none -e PKPOC_IMAGE="$DIGEST" "$IMAGE" \
+            python -m orchestrator.github_bot "$ACTION" --issue "$ISSUE" --author "$AUTHOR" --out comment.md
+
+      - name: Reply in the issue
+        if: always() && steps.auth.outputs.ok == 'true'
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          OUTCOME: ${{ job.status }}
+        run: |
+          if [ "$OUTCOME" != "success" ]; then
+            printf '\n⚠️ The tool hit an error at this step. Nothing was concluded. [Workflow log](%s)\n' "$RUN_URL" >> comment.md
+          fi
+          if [ -s comment.md ]; then gh issue comment "$ISSUE" -R "$GITHUB_REPOSITORY" --body-file comment.md; fi
+
+      - name: Commit the run store
+        if: always() && steps.auth.outputs.ok == 'true' && steps.handle.outcome != 'skipped'
+        run: scripts/run_store.sh commit store "issue #$ISSUE: $EVENT by $AUTHOR ($(cat action.txt 2>/dev/null || echo error))"
+
+      - name: Build the portal
+        id: site
+        if: steps.auth.outputs.ok == 'true' && steps.handle.outcome == 'success'
+        run: |
+          $DOCKER_RUN --network none "$IMAGE" python -m reporting.site --store store --out site
+          test ! -e site/runs/audit/pseudonym_map.jsonl
+          echo "published=true" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.site.outputs.published == 'true'
+        with:
+          path: site
+
+  deploy:
+    needs: handle
+    if: needs.handle.outputs.published == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

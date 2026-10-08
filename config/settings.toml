@@ -46,3 +46,7 @@ token = "PROCEDURE"
 [[pseudonymisation.patterns]]
 regex = '\b[A-Z]{2,5}-\d{3,6}-\d{2,4}\b'
 token = "STUDY"
+
+[github]
+repo = "djindetoss/pk-analysis-poc"
+pages_url = "https://djindetoss.github.io/pk-analysis-poc"

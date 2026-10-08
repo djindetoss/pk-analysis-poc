@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Analysis portal
+    url: https://djindetoss.github.io/pk-analysis-poc/
+    about: Start an analysis from the web portal (examples, request status, run history)

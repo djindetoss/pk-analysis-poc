@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+{% include "_style.html.j2" %}
+<title>PK Analysis Portal</title>
+<style>
+  .hero { display: grid; gap: 4px; margin-bottom: 8px; }
+  textarea { width: 100%; min-height: 140px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px;
+             background: var(--panel); color: var(--ink); font: 15px/1.5 system-ui, sans-serif; resize: vertical; }
+  textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .examples { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
+  .examples button { border: 1px solid var(--line); background: var(--chip); color: var(--ink); border-radius: 999px;
+                     padding: 4px 12px; font-size: .85rem; cursor: pointer; }
+  .examples button:hover { border-color: var(--accent); }
+  .cta { display: inline-block; background: var(--accent); color: #fff; border: 0; border-radius: 8px; padding: 10px 18px;
+         font-weight: 600; font-size: 1rem; cursor: pointer; text-decoration: none; }
+  .cta:disabled { opacity: .5; cursor: not-allowed; }
+  @media (prefers-color-scheme: dark) { .cta { color: #0d1b26; } }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; counter-reset: s; }
+  .step { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: .9rem; }
+  .step::before { counter-increment: s; content: counter(s); display: inline-grid; place-items: center; width: 22px; height: 22px;
+                  border-radius: 50%; background: var(--accent); color: #fff; font-size: .75rem; font-weight: 700; margin-right: 6px; }
+  .step strong { display: inline; }
+  .stats { display: flex; flex-wrap: wrap; gap: 10px; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px; min-width: 120px; }
+  .stat b { display: block; font-size: 1.4rem; }
+  .links a { margin-right: 16px; }
+  .status { white-space: nowrap; }
+  kbd { font: 12px ui-monospace, monospace; background: var(--chip); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; }
+</style>
+</head>
+<body><main>
+<div class="hero">
+  <h1>AI-assisted population-PK analysis</h1>
+  <p class="sub">Run an independent pop-PK analysis and compare it with the applicant's results, entirely from GitHub.
+    Demonstrator for IncreaseNET Task 7.7 · synthetic data only · tool {{ tool_version }}</p>
+</div>
+
+<div class="stats">
+  <div class="stat"><b>{{ requests | length }}</b><span class="note">analysis requests</span></div>
+  <div class="stat"><b>{{ n_runs }}</b><span class="note">runs</span></div>
+  <div class="stat"><b>{{ n_rejected }}</b><span class="note">rejected as out of scope</span></div>
+</div>
+
+<h2>Start a new analysis</h2>
+<div class="panel">
+  <label for="req"><strong>Describe the analysis as you would to a pharmacometrician</strong></label>
+  <div class="examples" aria-label="Examples">
+    {% for ex in examples %}<button type="button" data-text="{{ ex.text }}" title="{{ ex.text }}">{{ ex.label }}</button>{% endfor %}
+  </div>
+  <textarea id="req" placeholder="e.g. Reproduce the applicant's model for XYZ-123: two compartments, first-order absorption, combined error, IIV on CL, V2 and KA, FOCE-I. Reported: CL/F 4.2 L/h …"></textarea>
+  <p class="note">Only fictitious identifiers here: this demonstrator runs in a public repository. Identifiers such as <code>XYZ-123</code> are pseudonymised before the language model sees the text, and the data never leave the analysis engine.</p>
+  <button class="cta" id="go" disabled>Open the request on GitHub →</button>
+  <p class="note">This opens a pre-filled GitHub issue: click <em>Create</em>. The tool then replies in the issue thread within about two minutes.
+    Running analyses requires being a collaborator of the repository.</p>
+</div>
+
+<h2>How it works</h2>
+<div class="steps">
+  <div class="step"><strong>Request.</strong> Your text becomes an issue; the language model turns it into a structured spec. It writes no code and sees no data.</div>
+  <div class="step"><strong>Clarify.</strong> Missing methodology (e.g. BLQ handling) is asked, never guessed. Reply in the thread.</div>
+  <div class="step"><strong>Confirm.</strong> Review the proposed spec and comment <kbd>/confirm</kbd>. Anything outside the template catalogue is rejected.</div>
+  <div class="step"><strong>Run.</strong> A versioned nlmixr2 template runs in a pinned container with the network disabled.</div>
+  <div class="step"><strong>Review.</strong> The report flags differences with the applicant without concluding. Refine with <kbd>/refine …</kbd>, check with <kbd>/replay</kbd>.</div>
+</div>
+
+<h2>Analysis requests</h2>
+{% if requests %}
+<div class="scroll"><table>
+  <tr><th>Issue</th><th>Request</th><th>Status</th><th class="num">Runs</th><th>Last run</th><th>Updated</th></tr>
+  {% for r in requests %}
+  <tr>
+    <td><a href="https://github.com/{{ repo }}/issues/{{ r.issue }}">#{{ r.issue }}</a></td>
+    <td>{{ r.title | replace("Analysis request: ", "") }}</td>
+    <td class="status {{ status_class.get(r.status, '') }}">{{ status_label.get(r.status, r.status) }}</td>
+    <td class="num">{{ r.runs | length }}</td>
+    <td>{% if r.last_run_id %}<a href="runs/{{ r.last_run_id }}/report.html"><code>{{ r.last_run_id[-11:] }}</code></a>{% else %}–{% endif %}</td>
+    <td class="note">{{ r.updated_at }}</td>
+  </tr>{% endfor %}
+</table></div>
+{% else %}<p>No request yet: start one above.</p>{% endif %}
+
+<h2>Explore</h2>
+<p class="links">
+  <a href="runs/index.html">Run history (assessor requests)</a>
+  {% if has_demo %}<a href="demo/index.html">Reference demo run by CI</a>{% endif %}
+  <a href="https://github.com/{{ repo }}">Source code</a>
+  <a href="https://github.com/{{ repo }}/blob/main/DEMO_WALKTHROUGH.md">Demo walkthrough</a>
+</p>
+<p class="note">Generated {{ generated }}.</p>
+</main>
+<script>
+  const repo = {{ repo | tojson }};
+  const box = document.getElementById("req"), go = document.getElementById("go");
+  const sync = () => { go.disabled = box.value.trim().length < 10; };
+  document.querySelectorAll(".examples button").forEach(b => b.addEventListener("click", () => { box.value = b.dataset.text; sync(); box.focus(); }));
+  box.addEventListener("input", sync);
+  go.addEventListener("click", () => {
+    const text = box.value.trim();
+    const title = "Analysis request: " + (text.length > 70 ? text.slice(0, 67) + "…" : text);
+    const url = `https://github.com/${repo}/issues/new?template=analysis-request.yml`
+      + `&title=${encodeURIComponent(title)}&request=${encodeURIComponent(text)}`;
+    window.open(url, "_blank", "noopener");
+  });
+</script>
+</body></html>

@@ -1,0 +1,23 @@
+name: Analysis request
+description: Ask the tool to run an independent population-PK analysis (synthetic data only)
+title: "Analysis request: "
+labels: ["analysis-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the analysis in plain language. The tool replies in this thread: it asks for any missing
+        methodology, shows the proposed spec, and runs it only after you comment **`/confirm`**.
+        Use fictitious identifiers only: this repository is public.
+  - type: textarea
+    id: request
+    attributes:
+      label: Analysis request
+      description: Structural model, error model, IIV, estimation method, BLQ handling, applicant's reported values…
+      placeholder: "Reproduce the applicant's model for XYZ-123: two compartments, first-order absorption, combined error, IIV on CL, V2 and KA, FOCE-I. Reported: CL/F 4.2 L/h, V2/F 35 L, Q/F 8.1 L/h, V3/F 120 L, KA 1.1 /h."
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        **Commands in comments:** `/confirm` · `/refine <what to change>` · `/replay` · `/cancel` · `/help`

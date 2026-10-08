@@ -23,6 +23,7 @@ jobs:
       packages: write
     outputs:
       version: ${{ steps.meta.outputs.version }}
+      short_sha: ${{ steps.meta.outputs.short_sha }}
     steps:
       - uses: actions/checkout@v4
 
@@ -74,12 +75,6 @@ jobs:
           path: runs-out
           retention-days: 30
 
-      - name: Upload Pages artifact
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
-
       - name: Log in to GHCR
         if: github.event_name == 'push'
         uses: docker/login-action@v3
@@ -104,9 +99,42 @@ jobs:
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.version=${{ steps.meta.outputs.version }}
 
-  deploy-pages:
+  # The reference demo is stored in the run-store branch (demo/) and the whole portal is rebuilt:
+  # home page + assessor runs (runs/) + this demo (demo/).
+  publish:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build-test-demo
+    runs-on: ubuntu-latest
+    concurrency:
+      group: run-store
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: runs-${{ needs.build-test-demo.outputs.short_sha }}
+          path: runs-out
+      - name: Update the reference demo in the run store
+        run: |
+          scripts/run_store.sh checkout store
+          rm -rf store/demo && mkdir -p store/demo && cp -R runs-out/. store/demo/
+          rm -f store/demo/audit/pseudonym_map.jsonl
+          scripts/run_store.sh commit store "demo: reference run for ${GITHUB_SHA::7}"
+      - name: Build the portal
+        env:
+          IMAGE_SHA: ${{ env.IMAGE }}:sha-${{ needs.build-test-demo.outputs.short_sha }}
+        run: |
+          docker run --rm --network none --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/app" -w /app \
+            "$IMAGE_SHA" python -m reporting.site --store store --out site
+          test ! -e site/demo/audit/pseudonym_map.jsonl
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy-pages:
+    needs: publish
     runs-on: ubuntu-latest
     permissions:
       pages: write

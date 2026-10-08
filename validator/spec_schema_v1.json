@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/djindetoss/pk-analysis-poc/validator/spec_schema_v1.json",
+  "title": "Population-PK analysis spec, version 1",
+  "description": "The only object a language model may produce. Unknown keys or values outside the enumerations are out of scope by construction.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["compartments", "absorption", "route", "error_model", "iiv", "estimation", "blq_method"],
+  "properties": {
+    "template": {"type": "string", "enum": ["pk_1cmt_oral_v1", "pk_2cmt_oral_v1"]},
+    "compartments": {"type": "integer", "enum": [1, 2]},
+    "absorption": {"type": "string", "enum": ["first_order"]},
+    "route": {"type": "string", "enum": ["oral", "iv"]},
+    "error_model": {"type": "string", "enum": ["additive", "proportional", "combined"]},
+    "iiv": {
+      "type": "array",
+      "items": {"type": "string", "enum": ["CL", "V", "V2", "Q", "V3", "KA"]},
+      "uniqueItems": true
+    },
+    "estimation": {"type": "string", "enum": ["FOCEi", "SAEM"]},
+    "blq_method": {"type": "string", "enum": ["M1", "M3"]},
+    "fixed_params": {
+      "type": "object",
+      "propertyNames": {"enum": ["CL", "V", "V2", "Q", "V3", "KA"]},
+      "additionalProperties": {"type": "number", "exclusiveMinimum": 0}
+    },
+    "reference_values": {
+      "description": "Applicant's reported estimates. Structural parameters on the natural scale; IIV_<PARAM> as CV%.",
+      "type": "object",
+      "propertyNames": {"pattern": "^(CL|V|V2|Q|V3|KA|IIV_(CL|V|V2|Q|V3|KA))$"},
+      "additionalProperties": {"type": "number", "exclusiveMinimum": 0}
+    },
+    "analysis_type": {"type": "string", "enum": ["primary", "sensitivity"]}
+  }
+}

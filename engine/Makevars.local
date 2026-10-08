@@ -1,0 +1,4 @@
+# Used only by engine/runner.py when no Fortran toolchain is installed (e.g. macOS
+# with CRAN R binaries but without gfortran). rxode2 compiles each model to C at
+# run time; the generated code needs no Fortran runtime, so FLIBS can be emptied.
+FLIBS =

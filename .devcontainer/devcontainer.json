@@ -1,0 +1,20 @@
+{
+  "name": "pk-analysis-poc",
+  "image": "ghcr.io/djindetoss/pk-analysis-poc:latest",
+  "workspaceFolder": "/workspaces/pk-analysis-poc",
+  "containerEnv": {
+    "PKPOC_RUNS_DIR": "/workspaces/pk-analysis-poc/runs",
+    "PYTHON": "/opt/venv/bin/python"
+  },
+  "hostRequirements": { "cpus": 4, "memory": "8gb" },
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "REditorSupport.r"],
+      "settings": { "python.defaultInterpreterPath": "/opt/venv/bin/python" }
+    },
+    "codespaces": { "openFiles": ["README.md", "DEMO_WALKTHROUGH.md"] }
+  },
+  "postAttachCommand": "echo 'Run the demo with:  ./run_demo.sh --auto-confirm'",
+  "forwardPorts": [8000],
+  "portsAttributes": { "8000": { "label": "Run history (python -m http.server -d runs 8000)" } }
+}

@@ -1,0 +1,147 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  IMAGE: ghcr.io/djindetoss/pk-analysis-poc
+
+jobs:
+  build-test-demo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Image metadata
+        id: meta
+        run: |
+          echo "version=$(cat VERSION)" >> "$GITHUB_OUTPUT"
+          echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@v3
+
+      # The R layer (nlmixr2) is cached in the GitHub Actions cache: only the first
+      # build, or a change to install_r_packages.R / the base image, reinstalls it.
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Containerfile
+          load: true
+          tags: pk-analysis-poc:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Unit tests (pytest)
+        run: docker run --rm pk-analysis-poc:ci python -m pytest -q
+
+      - name: LLM evaluation bench (mock extractor)
+        run: docker run --rm pk-analysis-poc:ci python -m harness.eval.run_eval
+
+      - name: End-to-end demo, network disabled
+        run: |
+          mkdir -p runs-out
+          docker run --rm --network none \
+            -e GITHUB_SHA -e PKPOC_IMAGE="${IMAGE}:sha-${{ steps.meta.outputs.short_sha }}" \
+            -v "$PWD/runs-out:/app/runs" \
+            pk-analysis-poc:ci ./run_demo.sh --auto-confirm
+
+      - name: Build static site
+        run: |
+          docker run --rm -v "$PWD/runs-out:/app/runs" -v "$PWD/site:/app/site" \
+            pk-analysis-poc:ci python -m reporting.site /app/runs /app/site
+          sudo chown -R "$USER" site runs-out
+          test ! -e site/audit/pseudonym_map.jsonl
+
+      - name: Keep the run store as a workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: runs-${{ steps.meta.outputs.short_sha }}
+          path: runs-out
+          retention-days: 30
+
+      - name: Upload Pages artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Log in to GHCR
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push image (sha, version, latest)
+        if: github.event_name == 'push'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Containerfile
+          push: true
+          cache-from: type=gha
+          tags: |
+            ${{ env.IMAGE }}:sha-${{ steps.meta.outputs.short_sha }}
+            ${{ env.IMAGE }}:${{ steps.meta.outputs.version }}
+            ${{ env.IMAGE }}:latest
+          labels: |
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.version=${{ steps.meta.outputs.version }}
+
+  deploy-pages:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build-test-demo
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Optional: evaluate the real LLM extractor when the secret is configured.
+  llm-eval:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build-test-demo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check secret
+        id: key
+        env:
+          KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: echo "present=$([ -n "$KEY" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-python@v5
+        if: steps.key.outputs.present == 'true'
+        with:
+          python-version: "3.11"
+      - name: Run eval bench against Claude
+        if: steps.key.outputs.present == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PKPOC_RUNS_DIR: ${{ runner.temp }}/runs
+        run: |
+          pip install -r requirements.txt -r requirements-llm.txt
+          python -m harness.eval.run_eval --extractor anthropic
+      - name: Skipped (no ANTHROPIC_API_KEY secret)
+        if: steps.key.outputs.present != 'true'
+        run: echo "ANTHROPIC_API_KEY not configured - the mock extractor is used everywhere."

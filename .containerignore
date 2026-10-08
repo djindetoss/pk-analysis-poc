@@ -1,0 +1,9 @@
+.git
+.venv
+runs/*
+!runs/.gitkeep
+site
+data/raw
+.env
+**/__pycache__
+.pytest_cache

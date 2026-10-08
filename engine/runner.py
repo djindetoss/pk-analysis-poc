@@ -33,8 +33,26 @@ class EngineOutcome:
         return self.returncode == 0 and self.results is not None
 
 
+# glibc's libm selects CPU-specific code paths (AVX2/AVX-512/FMA) at run time, so the same binary can
+# round differently on two machines and an ill-conditioned optimisation can stop at a different point.
+# Forcing the generic code paths made a FOCEi/M3 fit bit-for-bit identical on 8 GitHub runners with
+# 3 CPU models, versus 2 distinct results without it (.github/workflows/reproducibility.yml).
+# An explicitly set (even empty) GLIBC_TUNABLES is respected, which is how "native" mode is tested.
+PINNED_MATH_ENV = {
+    "GLIBC_TUNABLES": "glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4",
+}
+
+
+def math_env() -> dict[str, str]:
+    """Math-library settings the engine runs with (recorded in each manifest)."""
+    if platform.system() != "Linux":
+        return {}
+    return {k: os.environ.get(k, v) for k, v in PINNED_MATH_ENV.items()}
+
+
 def engine_env() -> dict[str, str]:
     env = dict(os.environ)
+    env.update(math_env())
     # macOS with CRAN R binaries but no Fortran toolchain: rxode2's run-time model
     # compilation would try to link -lgfortran, which the generated C does not need.
     if platform.system() == "Darwin" and shutil.which("gfortran") is None:

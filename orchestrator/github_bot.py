@@ -252,6 +252,10 @@ def replay(issue: int, author: str) -> str:
     largest = ", ".join(f"{k} {v:.1e}" for k, v in rp["largest_differences"].items())
     if ok:
         context = ""
+    elif rp.get("math_env_original") != rp.get("math_env_replay"):
+        context = ("\n\nThe two runs used different math-library settings (the original predates pinned "
+                   "math code paths), so bit-for-bit equality is not expected. Re-run the analysis and replay "
+                   "that run to check reproducibility under the current settings.")
     elif rp["same_cpu"]:
         context = (f"\n\nBoth runs used the same image and CPU model (`{rp['cpu_original']}`): this difference "
                    f"is unexpected and should be investigated.")

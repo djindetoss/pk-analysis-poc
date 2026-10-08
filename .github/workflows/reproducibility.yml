@@ -1,8 +1,8 @@
 name: Reproducibility across machines
 
 # Runs the same stored spec (2-cmt, FOCEi, BLQ M3) in the same image on several GitHub-hosted runners,
-# which do not all have the same CPU. "native" lets BLAS and glibc's libm pick CPU-specific code paths
-# (AVX2/AVX-512/FMA); "pinned" forces generic code paths. The summary groups results by CPU model.
+# which do not all have the same CPU. "pinned" is the default (generic libm code paths, see engine/runner.py);
+# "native" lets glibc's libm pick CPU-specific code paths (AVX2/AVX-512/FMA). The summary groups by CPU model.
 
 on:
   workflow_dispatch:
@@ -40,11 +40,8 @@ jobs:
           MODE: ${{ matrix.mode }}
         run: |
           docker pull --quiet "$IMAGE"
-          if [ "$MODE" = "pinned" ]; then
-            MATH="-e OPENBLAS_CORETYPE=Prescott -e GLIBC_TUNABLES=glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4"
-          else
-            MATH=""
-          fi
+          # pinned = the image default; native = math libraries free to pick CPU-specific code paths
+          if [ "$MODE" = "native" ]; then MATH="-e GLIBC_TUNABLES="; else MATH=""; fi
           RUN="docker run --rm --network none --user $(id -u):$(id -g) -e HOME=/tmp -v $PWD:/app -w /app -e PKPOC_RUNS_DIR=/app/out $MATH $IMAGE"
           $RUN Rscript --vanilla data/make_synthetic.R data/raw/adpc_synthetic.csv
           rid=$($RUN python -m orchestrator.cli run-spec experiments/spec_2cmt_m3.json --purpose experiment | tail -1)

@@ -20,9 +20,11 @@ COPY requirements.txt requirements-llm.txt /tmp/
 RUN python3 -m venv /opt/venv \
  && /opt/venv/bin/pip install --no-cache-dir -r /tmp/requirements.txt -r /tmp/requirements-llm.txt
 
+# Generic libm code paths: bit-for-bit identical estimates whatever the host CPU (see engine/runner.py).
 ENV PATH=/opt/venv/bin:$PATH \
     PYTHON=/opt/venv/bin/python \
-    PKPOC_RUNS_DIR=/app/runs
+    PKPOC_RUNS_DIR=/app/runs \
+    GLIBC_TUNABLES=glibc.cpu.hwcaps=-AVX2_Usable,-AVX512F_Usable,-FMA_Usable,-FMA4_Usable,-AVX2,-AVX512F,-FMA,-FMA4
 
 WORKDIR /app
 COPY . /app

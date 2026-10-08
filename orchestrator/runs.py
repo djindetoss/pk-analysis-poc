@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Any
 
 from common.core import ROOT, TOOL_VERSION, runs_dir, sha256_file
+from engine.runner import math_env
 
 MANIFEST_REQUIRED = [
     "run_id", "parent_run_id", "root_run_id", "purpose", "analysis_type", "status", "created_at",
@@ -107,15 +108,12 @@ def cpu_model() -> str | None:
         return None
 
 
-MATH_ENV = ("OPENBLAS_CORETYPE", "GLIBC_TUNABLES", "OMP_NUM_THREADS")
-
-
 def environment() -> dict[str, Any]:
     return {
         "platform": platform.platform(),
         "machine": platform.machine(),
         "cpu": cpu_model(),
-        "math_env": {k: os.environ.get(k) for k in MATH_ENV if os.environ.get(k)},
+        "math_env": math_env(),
         "container_image": os.environ.get("PKPOC_IMAGE"),
         "git_commit": git_commit(),
         "python_executable": sys.executable,

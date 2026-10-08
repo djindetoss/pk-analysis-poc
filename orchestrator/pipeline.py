@@ -322,6 +322,7 @@ def replay(run_id: str, rel_tol: float = 1e-6) -> dict[str, Any]:
         "largest_differences": dict(sorted(diffs.items(), key=lambda kv: -kv[1])[:3]),
         "cpu_original": m["environment"].get("cpu"), "cpu_replay": new["environment"].get("cpu"),
         "same_cpu": m["environment"].get("cpu") == new["environment"].get("cpu"),
+        "math_env_original": m["environment"].get("math_env"), "math_env_replay": new["environment"].get("math_env"),
         "image_original": m["environment"].get("container_image"),
         "image_replay": new["environment"].get("container_image"),
     }
